@@ -1,4 +1,4 @@
-url: https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop
+url: https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop
 
 template:
   params:
@@ -13,6 +13,6 @@ home:
 navbar:
   right:
    - icon: fa-github
-     href: https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop
+     href: https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop
 
 

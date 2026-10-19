@@ -128,7 +128,7 @@ In this part, we will focus on the following ways of using PhiSpace for ST data:
 
 Load packages and define some functions.
 ```{r}
-# remotes::install_github("bhuvad/CosMxSpatialAnalysisWorkshop", ref = "PhiSpace")
+# remotes::install_github("BhuvaLab/CosMxSpatialAnalysisWorkshop", ref = "PhiSpace")
 
 # Key methods
 suppressPackageStartupMessages(library(PhiSpace))

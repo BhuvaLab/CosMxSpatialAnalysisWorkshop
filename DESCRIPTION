@@ -74,7 +74,7 @@ Imports:
     Seurat,
     kerndwd
 Remotes:
-    bhuvad/SpaNorm,
+    BhuvaLab/SpaNorm,
     jiadongm/PhiSpace/pkg,
     DavisLaboratory/hoodscanR
 Suggests: 
@@ -88,7 +88,7 @@ Suggests:
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Language: en-US
-URL: https://bhuvad.github.io/CosMxSpatialAnalysisWorkshop/
-BugReports: https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop/issues
+URL: https://bhuvalab.github.io/CosMxSpatialAnalysisWorkshop/
+BugReports: https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/issues
 DockerImage: bhuvad/CosMxSpatialAnalysisWorkshop:latest
 LazyData: true
