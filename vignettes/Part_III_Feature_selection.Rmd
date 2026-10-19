@@ -1,0 +1,156 @@
+---
+title: "Part III: Selecting clinically relevant features from molecular phenotypes"
+date: "`r format(Sys.time(), '%b %Y')`"
+title-block-banner: true
+author:
+  # TODO: add orcid and email for Aaron Kilgallon
+  - name: Aaron Kilgallon
+    affiliation:
+      - Queensland Spatial Biology Centre, Wesley Research Institute
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    toc: yes
+    toc_depth: 2
+    number_sections: yes
+    fig_caption: yes
+    df_print: paged
+comments:
+  hypothesis:
+    theme: clean
+editor: source
+nocite: |
+  @R-ggplot2, @R-knitr, @R-rmarkdown, @R-prettydoc
+bibliography: [bibliography.bib, packages.bib]
+vignette: >
+  %\VignetteIndexEntry{Part III: Selecting clinically relevant features from molecular phenotypes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+# Template: code chunks below are eval = FALSE until the content is written.
+# Switch a chunk to eval = TRUE once the data and packages it needs are in
+# DESCRIPTION (Imports / Remotes) and the datasets are in data/.
+knitr::opts_chunk$set(eval = FALSE, message = FALSE, warning = FALSE)
+```
+
+# Introduction
+
+<!-- TODO: 2-3 paragraphs.
+     - Why feature selection matters in spatial omics: thousands of genes/probes
+       and many cells, but a clinical question that needs a short, interpretable,
+       measurable panel.
+     - What a "molecular phenotype" is in this workshop (e.g. cell state, spatial
+       domain, niche or pathway activity) and how it links to a clinical variable
+       (e.g. response, survival, grade).
+     - How this part follows on from Parts I and II. -->
+
+## Learning objectives
+
+<!-- TODO: confirm with the workshop plan. -->
+
+By the end of this part, you will be able to:
+
+ - Define a molecular phenotype from spatial transcriptomics data.
+ - Apply several feature selection approaches and explain how they differ.
+ - Assess whether the selected features are clinically relevant, and whether the selection is stable.
+ - Choose an approach that suits a given question and dataset.
+
+## Workshop overview
+
+<!-- TODO: finalise timings and keep in step with the README time outline. -->
+
+| Section | Content | Time |
+|---|---|---|
+| 1 | Defining molecular phenotypes | 45m |
+| 2 | Feature selection methods | 45m |
+| 3 | Evaluating clinical relevance | 45m |
+
+## Data description
+
+<!-- TODO: dataset, source, sample and patient counts, the clinical variable(s)
+     and how the data were prepared. If the data are bundled in data/, document
+     them in R/CosMxSpatialAnalysisWorkshop.R and add the matching man/ page. -->
+
+# Setup
+
+```{r libraries}
+# TODO: load the packages used below, and add each to DESCRIPTION.
+library(SpatialExperiment)
+library(ggplot2)
+library(patchwork)
+```
+
+```{r load-data}
+# TODO: load the prepared dataset.
+# TODO: load the bundled dataset with data() from this package.
+```
+
+# Defining molecular phenotypes
+
+<!-- TODO: show how the molecular phenotype is derived, for example:
+     - cell type or cell state labels (link to Part I)
+     - spatial domains or niches
+     - pathway or signature scores per cell or per region
+     - summarising to the level of the clinical variable (e.g. per patient or per sample)
+     Include one figure that shows the phenotype in space. -->
+
+```{r define-phenotype}
+```
+
+# Feature selection methods
+
+<!-- TODO: one subsection per approach. For each, state the idea, when to use
+     it, its assumptions, and show a short worked example on the same data so the
+     results can be compared in the final subsection. -->
+
+## Filter methods
+
+<!-- e.g. differential expression, variance or univariate association with the phenotype. -->
+
+```{r filter-methods}
+```
+
+## Spatially aware methods
+
+<!-- e.g. spatially variable genes; features chosen for spatial pattern. -->
+
+```{r spatial-methods}
+```
+
+## Model-based methods
+
+<!-- e.g. penalised regression, tree-based importance, embedded selection. -->
+
+```{r model-based-methods}
+```
+
+## Comparing the selected features
+
+<!-- TODO: overlap between methods (e.g. an UpSet plot) and a short interpretation. -->
+
+```{r compare-methods}
+```
+
+# Evaluating clinical relevance
+
+<!-- TODO: cover
+     - association of the selected features with the clinical variable
+     - validation on held-out samples or an independent cohort
+     - stability of the selection under resampling
+     - avoiding information leakage (select features inside the cross-validation loop)
+     - biological interpretation of the selected features -->
+
+```{r evaluate}
+```
+
+# Summary
+
+<!-- TODO: key take-aways and a short guide to choosing a method. -->
+
+# Session information
+
+```{r session-info, eval=TRUE}
+sessionInfo()
+```

@@ -35,6 +35,19 @@ Attendees will require a laptop with internet access and should have familiarity
 | Q & A                                                                | 15m  |
 
 
+### Session 3 - Selecting clinically relevant features from molecular phenotypes
+
+<!-- TODO: confirm timings and content when the section is written. -->
+
+| Activity                                                             | Time |
+|----------------------------------------------------------------------|------|
+| Introduction & setup                                                 | 30m  |
+| Part 1. Defining molecular phenotypes                                | 45m  |
+| Part 2. Feature selection methods                                    | 45m  |
+| Part 3. Evaluating clinical relevance                                | 45m  |
+| Q & A                                                                | 15m  |
+
+
 ## Workshop goals and objectives
 
 ### Learning goals

@@ -12,11 +12,10 @@ Authors@R:
         comment = c(ORCID = '0000-0002-6398-9157')
       ),
       person(
-        "Jiadong",
-        "Mao",
-        email = "jiadong.mao@unimelb.edu.au",
+        "Aaron",
+        "Kilgallon",
         role = c("aut"),
-        comment = c(ORCID = '0000-0002-3818-1981')
+        comment = c(affiliation = "Queensland Spatial Biology Centre, Wesley Research Institute")
       ),
       person(
         "Melody",
