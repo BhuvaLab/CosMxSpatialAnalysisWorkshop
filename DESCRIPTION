@@ -60,22 +60,14 @@ Imports:
     scuttle,
     scran,
     hoodscanR,
-    PhiSpace,
-    seriation,
     dplyr,
-    tidyr,
-    magrittr,
-    ggpubr,
-    ComplexHeatmap,
     jazzPanda, 
     corrplot,
     pheatmap,
     ComplexUpset,
-    Seurat,
-    kerndwd
+    Seurat
 Remotes:
     BhuvaLab/SpaNorm,
-    jiadongm/PhiSpace/pkg,
     DavisLaboratory/hoodscanR
 Suggests: 
     pkgdown,

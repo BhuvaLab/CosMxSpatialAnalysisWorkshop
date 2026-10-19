@@ -24,17 +24,7 @@ Attendees will require a laptop with internet access and should have familiarity
 | Part 3. Interpret spatial biology (DE, GSEA)                         | 45m  |
 | Q & A                                                                | 15m  |
 
-### Session 2 - Exploring cell states using PhiSpace
-
-| Activity                                                             | Time |
-|----------------------------------------------------------------------|------|
-| Introduction & setup                                                 | 30m  |
-| Part 1. How to run PhiSpace: the basics.                             | 45m  |
-| Part 2. Identify spatial niches/doma                                 | 45m  |
-| Part 3. Learn biology from multiple tissue sections                  | 45m  |
-| Q & A                                                                | 15m  |
-
-### Session 3 - Deciphering spatial marker genes using JazzPanda
+### Session 2 - Deciphering spatial marker genes using JazzPanda
 
 | Activity                                                             | Time |
 |----------------------------------------------------------------------|------|
