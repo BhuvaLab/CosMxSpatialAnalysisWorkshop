@@ -50,10 +50,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/Differentially_expression_analysis.html">Part III: Spatially-Aware Marker Gene Detection in Spatial Transcriptomics Data</a>
+      <a href="articles/Differentially_expression_analysis.html">Part II: Spatially-Aware Marker Gene Detection in Spatial Transcriptomics Data</a>
     </li>
     <li>
-      <a href="articles/Part_II_PhiSpace.html">Part II: Identify cell states using PhiSpace</a>
+      <a href="articles/Part_III_Feature_selection.html">Part III: Selecting clinically relevant features from molecular phenotypes</a>
     </li>
     <li>
       <a href="articles/workflow_spatial_cosmx.html">Part I: Introduction to imaging-based spatial transcriptomics analysis (Bruker CosMx NSCLC)</a>
@@ -66,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop">
+  <a href="https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop">
     <span class="fa fa-github"></span>
 
   </a>
@@ -109,28 +109,28 @@
 <col width="92%">
 <col width="7%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Activity</th>
 <th>Time</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Introduction &amp; setup</td>
 <td>30m</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Part 1. Preprocess spatial `omics data (QC, Normalisation, SVG, PCA)</td>
 <td>45m</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Part 2. Infer spatial biology (cell typing, spatial domains)</td>
 <td>45m</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Part 3. Interpret spatial biology (DE, GSEA)</td>
 <td>45m</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Q &amp; A</td>
 <td>15m</td>
 </tr>
@@ -138,71 +138,72 @@
 </table>
 </div>
 <div class="section level3">
-<h3 id="session-2---exploring-cell-states-using-phispace">Session 2 - Exploring cell states using PhiSpace<a class="anchor" aria-label="anchor" href="#session-2---exploring-cell-states-using-phispace"></a>
+<h3 id="session-2---deciphering-spatial-marker-genes-using-jazzpanda">Session 2 - Deciphering spatial marker genes using JazzPanda<a class="anchor" aria-label="anchor" href="#session-2---deciphering-spatial-marker-genes-using-jazzpanda"></a>
 </h3>
 <table class="table">
 <colgroup>
 <col width="92%">
 <col width="7%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Activity</th>
 <th>Time</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Introduction &amp; setup</td>
 <td>30m</td>
 </tr>
-<tr class="even">
-<td>Part 1. How to run PhiSpace: the basics.</td>
-<td>45m</td>
-</tr>
-<tr class="odd">
-<td>Part 2. Identify spatial niches/doma</td>
-<td>45m</td>
-</tr>
-<tr class="even">
-<td>Part 3. Learn biology from multiple tissue sections</td>
-<td>45m</td>
-</tr>
-<tr class="odd">
-<td>Q &amp; A</td>
-<td>15m</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="session-3---deciphering-spatial-marker-genes-using-jazzpanda">Session 3 - Deciphering spatial marker genes using JazzPanda<a class="anchor" aria-label="anchor" href="#session-3---deciphering-spatial-marker-genes-using-jazzpanda"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="92%">
-<col width="7%">
-</colgroup>
-<thead><tr class="header">
-<th>Activity</th>
-<th>Time</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Introduction &amp; setup</td>
-<td>30m</td>
-</tr>
-<tr class="even">
+<tr>
 <td>Part 1. Marker gene concepts in spatial transcriptomics</td>
 <td>45m</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Part 2. One-sample scenario</td>
 <td>45m</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Part 3. Multiple-sample scenario</td>
 <td>45m</td>
 </tr>
-<tr class="odd">
+<tr>
+<td>Q &amp; A</td>
+<td>15m</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="session-3---selecting-clinically-relevant-features-from-molecular-phenotypes">Session 3 - Selecting clinically relevant features from molecular phenotypes<a class="anchor" aria-label="anchor" href="#session-3---selecting-clinically-relevant-features-from-molecular-phenotypes"></a>
+</h3>
+<!-- TODO: confirm timings and content when the section is written. -->
+<table class="table">
+<colgroup>
+<col width="92%">
+<col width="7%">
+</colgroup>
+<thead><tr>
+<th>Activity</th>
+<th>Time</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Introduction &amp; setup</td>
+<td>30m</td>
+</tr>
+<tr>
+<td>Part 1. Defining molecular phenotypes</td>
+<td>45m</td>
+</tr>
+<tr>
+<td>Part 2. Feature selection methods</td>
+<td>45m</td>
+</tr>
+<tr>
+<td>Part 3. Evaluating clinical relevance</td>
+<td>45m</td>
+</tr>
+<tr>
 <td>Q &amp; A</td>
 <td>15m</td>
 </tr>
@@ -246,10 +247,10 @@
 <pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'remotes'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Install workshop package</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"bhuvad/CosMxSpatialAnalysisWorkshop"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"BhuvaLab/CosMxSpatialAnalysisWorkshop"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Alternatively, if choose to build vignettes:</span></span>
-<span><span class="co"># remotes::install_github("bhuvad/CosMxSpatialAnalysisWorkshop", build_vignettes = TRUE)</span></span>
+<span><span class="co"># remotes::install_github("BhuvaLab/CosMxSpatialAnalysisWorkshop", build_vignettes = TRUE)</span></span>
 <span><span class="co"># library(CosMxSpatialAnalysisWorkshop)</span></span>
 <span><span class="co"># browseVignettes("CosMxSpatialAnalysisWorkshop")</span></span></code></pre>
 </div>
@@ -261,8 +262,8 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop/">Browse source code</a></li>
-<li><a href="https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop/issues">Report a bug</a></li>
+<li><a href="https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/">Browse source code</a></li>
+<li><a href="https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/issues">Report a bug</a></li>
 </ul>
 </div>
 
@@ -286,9 +287,10 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Dharmesh D. Bhuva <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-6398-9157" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
-<li>Jiadong Mao <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-3818-1981" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Aaron Kilgallon <br><small class="roles"> Author </small>   </li>
 <li>Melody Jin <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-2222-0958" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>Chin Wee Tan <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9695-7218" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
@@ -300,12 +302,12 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Dharmesh D. Bhuva, Jiadong Mao, Melody Jin, Chin Wee Tan.</p>
+<p>Developed by Dharmesh D. Bhuva, Aaron Kilgallon, Melody Jin, Chin Wee Tan.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer>

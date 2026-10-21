@@ -49,10 +49,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Differentially_expression_analysis.html">Part III: Spatially-Aware Marker Gene Detection in Spatial Transcriptomics Data</a>
+      <a href="../articles/Differentially_expression_analysis.html">Part II: Spatially-Aware Marker Gene Detection in Spatial Transcriptomics Data</a>
     </li>
     <li>
-      <a href="../articles/Part_II_PhiSpace.html">Part II: Identify cell states using PhiSpace</a>
+      <a href="../articles/Part_III_Feature_selection.html">Part III: Selecting clinically relevant features from molecular phenotypes</a>
     </li>
     <li>
       <a href="../articles/workflow_spatial_cosmx.html">Part I: Introduction to imaging-based spatial transcriptomics analysis (Bruker CosMx NSCLC)</a>
@@ -65,7 +65,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop">
+  <a href="https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop">
     <span class="fa fa-github"></span>
 
   </a>
@@ -99,9 +99,9 @@ Tan</h4>
 Melbourne<br><a class="author_email" href="mailto:#"></a><a href="mailto:cwtan@wehi.edu.au" class="email">cwtan@wehi.edu.au</a>
       </address>
                   
-            <h4 data-toc-skip class="date">Nov 2025</h4>
+            <h4 data-toc-skip class="date">Oct 2026</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop/blob/main/vignettes/workflow_spatial_cosmx.Rmd"><code>vignettes/workflow_spatial_cosmx.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/blob/main/vignettes/workflow_spatial_cosmx.Rmd"><code>vignettes/workflow_spatial_cosmx.Rmd</code></a></small>
       <div class="hidden name"><code>workflow_spatial_cosmx.Rmd</code></div>
 
     </div>
@@ -110,7 +110,7 @@ Melbourne<br><a class="author_email" href="mailto:#"></a><a href="mailto:cwtan@w
     
 <p>
 </p>
-<p><strong>R version</strong>: R version 4.5.2 (2025-10-31) <br><strong>Bioconductor version</strong>: 3.22 <br><strong>Package
+<p><strong>R version</strong>: R version 4.6.1 (2026-06-24) <br><strong>Bioconductor version</strong>: 3.23 <br><strong>Package
 version</strong>: 1.0.0</p>
 
 <div class="section level2">
@@ -179,7 +179,7 @@ workshop comes from 4 fields of view (FOVs) from the sample labeled
 Lung5_Rep3. This window is shown in the context of the full tissue
 below.</p>
 <div class="float">
-<img src="https://raw.githubusercontent.com/bhuvad/CosMxSpatialAnalysisWorkshop/refs/heads/main/inst/extdata/full_tissue.png" alt="The CosMx non-small cell lung cancer (NSCLC) dataset."><div class="figcaption">The CosMx non-small cell lung cancer (NSCLC)
+<img src="https://raw.githubusercontent.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/refs/heads/main/inst/extdata/full_tissue.png" alt="The CosMx non-small cell lung cancer (NSCLC) dataset."><div class="figcaption">The CosMx non-small cell lung cancer (NSCLC)
 dataset.</div>
 </div>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -204,7 +204,7 @@ dataset.</div>
 <span><span class="co">## imgData names(1): sample_id</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># retrieve column (cell) annotations</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">colData</span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 13463 rows and 7 columns</span></span>
 <span><span class="co">##                      sample_id     cell_id              region  technology</span></span>
 <span><span class="co">##                    &lt;character&gt; &lt;character&gt;         &lt;character&gt; &lt;character&gt;</span></span>
@@ -234,7 +234,7 @@ dataset.</div>
 <span><span class="co">## Lung5_Rep3_22_999                      NA              Stroma       fov22</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># retrieve row (gene/probe) annotations</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">rowData</span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 980 rows and 2 columns</span></span>
 <span><span class="co">##                gene    genetype</span></span>
 <span><span class="co">##         &lt;character&gt; &lt;character&gt;</span></span>
@@ -278,15 +278,15 @@ dataset.</div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bhuvad.github.io/SpaNorm" class="external-link">SpaNorm</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bhuvalab.github.io/SpaNorm" class="external-link">SpaNorm</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># set default point size to 0.5 for this report</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/update_defaults.html" class="external-link">update_geom_defaults</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"point"</span>, new <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">region</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">region</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># improve legend visibility</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="700"></p>
 <p>For users interested in analysing the whole dataset, it can be
 obtained using the code below.</p>
 <blockquote>
@@ -323,7 +323,7 @@ vary across technologies and serve different purposes, we treat them
 equally for our analysis and assess them collectively. The breakdown of
 the different types of negative control probes is given below.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span><span class="op">$</span><span class="va">genetype</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu">rowData</span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span><span class="op">$</span><span class="va">genetype</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##   Gene NegPrb </span></span>
 <span><span class="co">##    960     20</span></span></code></pre>
@@ -357,7 +357,7 @@ the nucleus (<code>overlaps_nucleus</code>).</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scuttle</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># identify the negative control probes</span></span>
-<span><span class="va">is_neg</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span><span class="op">$</span><span class="va">genetype</span> <span class="op">!=</span> <span class="st">"Gene"</span></span>
+<span><span class="va">is_neg</span> <span class="op">=</span> <span class="fu">rowData</span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span><span class="op">$</span><span class="va">genetype</span> <span class="op">!=</span> <span class="st">"Gene"</span></span>
 <span><span class="co"># compute QC metrics for each cell</span></span>
 <span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/addPerCellQCMetrics.html" class="external-link">addPerCellQCMetrics</a></span><span class="op">(</span><span class="va">lung5</span>, subsets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"neg"</span> <span class="op">=</span> <span class="va">is_neg</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
@@ -398,7 +398,7 @@ low library sizes and number of genes detected.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"Region"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">50</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">75</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
 <p>However, we need to identify appropriate thresholds to classify poor
 quality cells. As the panel sizes and compositions for these emerging
 technologies are variable, there are no standards as of yet for
@@ -420,11 +420,11 @@ visualisations.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="co"># spatial plot</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">sum</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">sum</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Sum (library size)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># UMAP plot</span></span>
 <span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/standR/man/plotDR.html" class="external-link">plotDR</a></span><span class="op">(</span><span class="va">lung5</span>, dimred <span class="op">=</span> <span class="st">"UMAP"</span>, colour <span class="op">=</span> <span class="va">detected</span>, alpha <span class="op">=</span> <span class="fl">0.75</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
@@ -432,11 +432,11 @@ visualisations.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="co"># spatial plot</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">detected</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">detected</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Detected (number of genes expressed)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># UMAP plot</span></span>
 <span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/standR/man/plotDR.html" class="external-link">plotDR</a></span><span class="op">(</span><span class="va">lung5</span>, dimred <span class="op">=</span> <span class="st">"UMAP"</span>, colour <span class="op">=</span> <span class="va">subsets_neg_percent</span>, alpha <span class="op">=</span> <span class="fl">0.75</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
@@ -444,11 +444,11 @@ visualisations.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="co"># spatial plot</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">subsets_neg_percent</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">subsets_neg_percent</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"F"</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/oob.html" class="external-link">squish</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Proportion of negative control probes"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
 <p>Having visualised the quality metrics and their distrition across
 space and the genomic dimensions, we can now begin to test threshold
 values. We want to remove low quality cells but we have to be careful
@@ -476,12 +476,12 @@ under- filtering.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># spatial plot</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">keep</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">keep</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Cells retained after QC filtering"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="700"></p>
 <p>In practice, after poor quality cells are filtered out, we tend to
 see clearer separation of clusters in the UMAP (or equivalent
 visualisations). We also notice that poor quality cells often seem like
@@ -502,7 +502,7 @@ to cells being cut off from the field of view.</p>
 <span><span class="co"># remove negative probes</span></span>
 <span><span class="va">lung5</span> <span class="op">=</span> <span class="va">lung5</span><span class="op">[</span><span class="op">!</span><span class="va">is_neg</span>, <span class="op">]</span></span></code></pre></div>
 <p>Newer quality control tools are being developed and are currently
-under peer-review. These include SpotSweeper <span class="citation">(Totty, Hicks, and Guo 2024)</span> and <a href="https://github.com/drighelli/SpaceTrooper" class="external-link">SpaceTrooper</a>. As
+under peer-review. These include SpotSweeper <span class="citation">(Totty et al. 2024)</span> and <a href="https://github.com/drighelli/SpaceTrooper" class="external-link">SpaceTrooper</a>. As
 these software are not deposited to more permanent repositories, we do
 not use them in this workshop. We advise advanced users to use these
 tools for their QC as they help come up with additional QC summaries for
@@ -545,7 +545,7 @@ the data as they are designed to not measure any biology (i.e., the are
 synthetic probes designed to not hybridise with any transcripts in the
 system).</p>
 <div class="float">
-<img src="https://raw.githubusercontent.com/bhuvad/CosMxSpatialAnalysisWorkshop/refs/heads/main/inst/extdata/neg_probes_normalisation.png" alt="Using negative control probes to normalise spatial transcriptomics data."><div class="figcaption">Using negative control probes to normalise
+<img src="https://raw.githubusercontent.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/refs/heads/main/inst/extdata/neg_probes_normalisation.png" alt="Using negative control probes to normalise spatial transcriptomics data."><div class="figcaption">Using negative control probes to normalise
 spatial transcriptomics data.</div>
 </div>
 <p>Though it is ideal to use negative control probes for normalisation
@@ -560,20 +560,19 @@ recommend using false code counts for normalising Bruker CosMx
 datasets.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lung5</span><span class="op">$</span><span class="va">logLS</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log1p</a></span><span class="op">(</span><span class="va">lung5</span><span class="op">$</span><span class="va">sum</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log1p</a></span><span class="op">(</span><span class="va">lung5</span><span class="op">$</span><span class="va">sum</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">logLS</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">logLS</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"PRGn"</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/oob.html" class="external-link">squish</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="700"></p>
 <p>To remove these technical biases, we perform normalisation. As
 measurements are independent in bulk and single-cell RNA-seq (reactions
 happen independently for each sample/cell), each cell or sample can be
 normalised independently by computing sample/cell-specific adjustment
 factors. Measurements are locally dependent in spatial transcriptomics
 datasets therefore technical effects (including conventional library
-size effects) confound biology <span class="citation">(Bhuva et al.
-2024)</span>. The plot above show this clearly as the technical effect
-demarcate tissue structures. These can be due to various causes such
-as:</p>
+size effects) confound biology <span class="citation">(<span class="nocase">Bhuva et al.</span> 2024)</span>. The plot above show
+this clearly as the technical effect demarcate tissue structures. These
+can be due to various causes such as:</p>
 <ol style="list-style-type: decimal">
 <li>The tissue structure in one region is more rigid, thereby making it
 difficult for reagents to permeate.</li>
@@ -586,9 +585,9 @@ this, our team has developed the SpaNorm normalisation method that uses
 spatial dependence to decouple technical and biological effects <span class="citation">(Salim et al. 2024)</span>. SpaNorm uses a spatially
 constrained regularised generalised linear model to model library size
 effects and subsequently adjust the data. This is done by calling the
-<code><a href="https://bhuvad.github.io/spaNorm/reference/SpaNorm.html" class="external-link">SpaNorm()</a></code> function on a SpatialExperiment object.</p>
+<code><a href="https://rdrr.io/pkg/SpaNorm/man/SpaNorm.html" class="external-link">SpaNorm()</a></code> function on a SpatialExperiment object.</p>
 <div class="float">
-<img src="https://raw.githubusercontent.com/bhuvad/CosMxSpatialAnalysisWorkshop/refs/heads/main/inst/extdata/spanorm_schematic.png" alt="A schematic diagram of the SpaNorm normalisation method."><div class="figcaption">A schematic diagram of the SpaNorm normalisation
+<img src="https://raw.githubusercontent.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/refs/heads/main/inst/extdata/spanorm_schematic.png" alt="A schematic diagram of the SpaNorm normalisation method."><div class="figcaption">A schematic diagram of the SpaNorm normalisation
 method.</div>
 </div>
 <p>The key parameters for SpaNorm normalisation that need to be adjusted
@@ -621,7 +620,7 @@ relatively smooth.</li>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co"># perform SpaNorm normalisation</span></span>
-<span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/SpaNorm.html" class="external-link">SpaNorm</a></span><span class="op">(</span><span class="va">lung5</span>, df.tps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">3</span><span class="op">)</span>, sample.p <span class="op">=</span> <span class="fl">0.25</span>, batch <span class="op">=</span> <span class="va">lung5</span><span class="op">$</span><span class="va">fov</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/SpaNorm.html" class="external-link">SpaNorm</a></span><span class="op">(</span><span class="va">lung5</span>, df.tps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">3</span><span class="op">)</span>, sample.p <span class="op">=</span> <span class="fl">0.25</span>, batch <span class="op">=</span> <span class="va">lung5</span><span class="op">$</span><span class="va">fov</span><span class="op">)</span></span></code></pre></div>
 <p>Above, the model is fit and the default adjustment,
 <code>logPAC</code>, is computed. Alternative adjustments such as the
 mean biology (<code>meanbio</code>), pearson residuals similar to
@@ -631,41 +630,41 @@ the fit does not need to be repeated, however, the same parameters need
 to be passed to the function).</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compute mean biology</span></span>
-<span><span class="va">lung5_pearson</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/SpaNorm.html" class="external-link">SpaNorm</a></span><span class="op">(</span><span class="va">lung5</span>, df.tps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">3</span><span class="op">)</span>, batch <span class="op">=</span> <span class="va">lung5</span><span class="op">$</span><span class="va">fov</span>, adj.method <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
+<span><span class="va">lung5_pearson</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/SpaNorm.html" class="external-link">SpaNorm</a></span><span class="op">(</span><span class="va">lung5</span>, df.tps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">3</span><span class="op">)</span>, batch <span class="op">=</span> <span class="va">lung5</span><span class="op">$</span><span class="va">fov</span>, adj.method <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, what <span class="op">=</span> <span class="st">"expression"</span>, assay <span class="op">=</span> <span class="st">"logcounts"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, what <span class="op">=</span> <span class="st">"expression"</span>, assay <span class="op">=</span> <span class="st">"logcounts"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Normalised expression"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5_pearson</span>, what <span class="op">=</span> <span class="st">"expression"</span>, assay <span class="op">=</span> <span class="st">"logcounts"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5_pearson</span>, what <span class="op">=</span> <span class="st">"expression"</span>, assay <span class="op">=</span> <span class="st">"logcounts"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"F"</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">3</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/oob.html" class="external-link">squish</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Mean from SpaNorm model"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="700"></p>
 <p>Since the SpaNorm model learns the functions for biological and
 technical effects for each gene, we can also investigate these to ensure
 that the correct biology is learnt and modelled. The
-<code><a href="https://bhuvad.github.io/spaNorm/reference/plotCovariate.html" class="external-link">plotCovariate()</a></code> functions can be used to study these. It is
+<code><a href="https://rdrr.io/pkg/SpaNorm/man/plotCovariate.html" class="external-link">plotCovariate()</a></code> functions can be used to study these. It is
 worth remembering that while the biological function is independent of
 covariates (like an intercept), the technical function is a function of
 the library size. To enable some interpretation, we show how the
 function evaluates at the mean library size below.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotCovariate.html" class="external-link">plotCovariate</a></span><span class="op">(</span><span class="va">lung5</span>, covariate <span class="op">=</span> <span class="st">"biology"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotCovariate.html" class="external-link">plotCovariate</a></span><span class="op">(</span><span class="va">lung5</span>, covariate <span class="op">=</span> <span class="st">"biology"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Biological variation"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotCovariate.html" class="external-link">plotCovariate</a></span><span class="op">(</span><span class="va">lung5</span>, covariate <span class="op">=</span> <span class="st">"ls"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotCovariate.html" class="external-link">plotCovariate</a></span><span class="op">(</span><span class="va">lung5</span>, covariate <span class="op">=</span> <span class="st">"ls"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"G"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Technical variation"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
-<span><span class="va">p3</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotCovariate.html" class="external-link">plotCovariate</a></span><span class="op">(</span><span class="va">lung5</span>, covariate <span class="op">=</span> <span class="st">"batch"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotCovariate.html" class="external-link">plotCovariate</a></span><span class="op">(</span><span class="va">lung5</span>, covariate <span class="op">=</span> <span class="st">"batch"</span>, colour <span class="op">=</span> <span class="va">EPCAM</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Batch variation"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="va">p3</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="960"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="960"></p>
 <p><a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=DHRS" class="external-link"><em>EPCAM</em></a>
 is an epithelial cell marker gene that will also be expressed in lung
 cancer cells that are of epithelial origin. The SpaNorm model correctly
@@ -710,23 +709,23 @@ We can test for the importance of the coefficients for the biological
 components using a likelihood ratio test (LRT) by comparing the SpaNorm
 model (Model 1 below) to a nested model (Model 2) containing only the
 technical components. This allows us to identify statistically
-significant spatial variation. The <code><a href="https://bhuvad.github.io/spaNorm/reference/SpaNormSVG.html" class="external-link">SpaNormSVG()</a></code> function
+significant spatial variation. The <code><a href="https://rdrr.io/pkg/SpaNorm/man/SpaNormSVG.html" class="external-link">SpaNormSVG()</a></code> function
 fits this additional nested model, compares it to the full SpaNorm
 model, and performs the likelihood ratio test to identify spatially
 variable genes (SVGs). Results of the test are stored in the
 <code>rowData</code> of the SpatialExperiment object, but can also be
-retrieved using the <code><a href="https://bhuvad.github.io/spaNorm/reference/topSVGs.html" class="external-link">topSVGs()</a></code> function.</p>
+retrieved using the <code><a href="https://rdrr.io/pkg/SpaNorm/man/topSVGs.html" class="external-link">topSVGs()</a></code> function.</p>
 <div class="float">
-<img src="https://raw.githubusercontent.com/bhuvad/CosMxSpatialAnalysisWorkshop/refs/heads/main/inst/extdata/spanorm_svg_schematic.png" alt="A schematic diagram of the SpaNormSVG normalisation method."><div class="figcaption">A schematic diagram of the SpaNormSVG
+<img src="https://raw.githubusercontent.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/refs/heads/main/inst/extdata/spanorm_svg_schematic.png" alt="A schematic diagram of the SpaNormSVG normalisation method."><div class="figcaption">A schematic diagram of the SpaNormSVG
 normalisation method.</div>
 </div>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/SpaNormSVG.html" class="external-link">SpaNormSVG</a></span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span></span>
-<span><span class="va">topsvgs</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/topSVGs.html" class="external-link">topSVGs</a></span><span class="op">(</span><span class="va">lung5</span>, n <span class="op">=</span> <span class="fl">9</span>, fdr <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/SpaNormSVG.html" class="external-link">SpaNormSVG</a></span><span class="op">(</span><span class="va">lung5</span><span class="op">)</span></span>
+<span><span class="va">topsvgs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/topSVGs.html" class="external-link">topSVGs</a></span><span class="op">(</span><span class="va">lung5</span>, n <span class="op">=</span> <span class="fl">9</span>, fdr <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">topsvgs</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">gene</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span></span>
 <span>    <span class="va">lung5</span>,</span>
 <span>    what <span class="op">=</span> <span class="st">"expression"</span>,</span>
 <span>    assay <span class="op">=</span> <span class="st">"logcounts"</span>,</span>
@@ -736,7 +735,7 @@ normalisation method.</div>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span>ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="960"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="960"></p>
 </div>
 <div class="section level2">
 <h2 id="dimensional-reduction-using-glm-pca">Dimensional reduction using GLM-PCA<a class="anchor" aria-label="anchor" href="#dimensional-reduction-using-glm-pca"></a>
@@ -753,14 +752,14 @@ computationally intensive. A more practical approach was proposed by
 the GLM-PCA by computing PCA on the deviance residuals from a null model
 (a model consisting of technical variation alone). This model is already
 fit to identify SVGs in the previous step (Model 2) therefore GLM-PCA
-can be easily computed. The <code><a href="https://bhuvad.github.io/spaNorm/reference/SpaNormPCA.html" class="external-link">SpaNormPCA()</a></code> function can be
+can be easily computed. The <code><a href="https://rdrr.io/pkg/SpaNorm/man/SpaNormPCA.html" class="external-link">SpaNormPCA()</a></code> function can be
 used to compute GLM-PCA. In most cases, it will be comparable to PCA on
 the logPAC counts generated by SpaNorm, however, the GLM-PCA
 approximation is theoretically more rigorous and will poses better
 properties as discussed in <span class="citation">(Townes et al.
 2019)</span>.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/SpaNormPCA.html" class="external-link">SpaNormPCA</a></span><span class="op">(</span><span class="va">lung5</span>, svg.fdr <span class="op">=</span> <span class="fl">0.1</span>, ncomponents <span class="op">=</span> <span class="fl">20</span>, residuals <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/SpaNormPCA.html" class="external-link">SpaNormPCA</a></span><span class="op">(</span><span class="va">lung5</span>, svg.fdr <span class="op">=</span> <span class="fl">0.1</span>, ncomponents <span class="op">=</span> <span class="fl">20</span>, residuals <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
 <span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html" class="external-link">runUMAP</a></span><span class="op">(</span><span class="va">lung5</span>, min_dist <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># UMAP plot</span></span>
@@ -775,7 +774,7 @@ properties as discussed in <span class="citation">(Townes et al.
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"UMAP1"</span>, y <span class="op">=</span> <span class="st">"UMAP2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="cell-typing">Cell typing<a class="anchor" aria-label="anchor" href="#cell-typing"></a>
@@ -786,9 +785,9 @@ across well to spatial transcriptomics datasets. The two common
 strategies are reference-based and reference-free annotations. In the
 former, annotations are mapped across from a previously annotated
 dataset. For a thorough discussion on this topic, review the <a href="https://bioconductor.org/books/release/OSCA/" class="external-link">Orchestrating
-Single-Cell Analysis (OSCA) with Bioconductor</a> book <span class="citation">(Amezquita et al. 2020)</span>. Here, we use the
-SingleR package <span class="citation">(Aran et al. 2019)</span> along
-with a reference non-small cell lung cancer (NSCLC) dataset <span class="citation">(<strong>salcher2022high?</strong>)</span>.</p>
+Single-Cell Analysis (OSCA) with Bioconductor</a> book <span class="citation">(<span class="nocase">Amezquita et al.</span>
+2020)</span>. Here, we use the SingleR package <span class="citation">(<span class="nocase">Aran et al.</span> 2019)</span>
+along with a reference non-small cell lung cancer (NSCLC) dataset <span class="citation">(<strong>salcher2022high?</strong>)</span>.</p>
 <p>SingleR is a simple yet powerful algorithm that only requires a
 single prototype of what the cell type’s expression profile should look
 like. As such, counts are aggregated (pseudobulked) across cells to form
@@ -844,27 +843,24 @@ collapse them to a higher order classification below.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">luca_map</span><span class="op">)</span></span>
 <span><span class="va">lung5</span><span class="op">$</span><span class="va">cell_type</span> <span class="op">=</span> <span class="va">luca_map</span><span class="op">[</span><span class="va">lung5</span><span class="op">$</span><span class="va">cell_type_fine</span><span class="op">]</span></span></code></pre></div>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">cell_type</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">cell_type</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Predicted cell type"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Paired"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span>, alpha <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="" width="700"></p>
 <blockquote>
 <p>Though discrete cell type identities are appealing due to their ease
 of interpretation, in many biological systems, metastable cell states
 (also referred to as plasticity) are likely to be present. Thus, such
 discrete cell type annotation may force cells into states that are not
-representative of true biology. PhiSpace, covered in the second part of
-this workshop series, is a method developed to deal with this issue.
-PhiSpace assigns a continuous score for each cell belonging to a cell
-type. These scores can either be thought of as the degree of evidence
-towards a cell conforming to a certain cell type, or the location of a
-cell in a plastic trajectory. In cancer sytems, where plasticity is
-dominant due to regression to stem-like states, the continuous cell
-annotation PhiSpace provides is powerful. Part 2 of this workshop
-describes PhiSpace in detail and demonstrates the types of analyses it
-powers.</p>
+representative of true biology. PhiSpace is a method developed to deal
+with this issue. PhiSpace assigns a continuous score for each cell
+belonging to a cell type. These scores can either be thought of as the
+degree of evidence towards a cell conforming to a certain cell type, or
+the location of a cell in a plastic trajectory. In cancer sytems, where
+plasticity is dominant due to regression to stem-like states, the
+continuous cell annotation PhiSpace provides is powerful.</p>
 </blockquote>
 </div>
 <div class="section level2">
@@ -892,10 +888,10 @@ profiles.</li>
 determine the homogeneity of cell types within a local region of space
 around each cell. The <a href="https://bioconductor.org/packages/release/bioc/html/hoodscanR.html" class="external-link">hoodscanR</a>
 method is one such method that computes the probability of each cell
-type being in a local neighbourhood of each cell in the dataset <span class="citation">(Liu et al. 2024)</span>. The neighbourhood of each
-cell is determined based on the <code>k</code> parameter which specifies
-how many of the nearest neighbouring cells should be used to estimate
-the cell type probabilities.</p>
+type being in a local neighbourhood of each cell in the dataset <span class="citation">(<span class="nocase">Liu et al.</span> 2024)</span>.
+The neighbourhood of each cell is determined based on the <code>k</code>
+parameter which specifies how many of the nearest neighbouring cells
+should be used to estimate the cell type probabilities.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisLaboratory/hoodscanR" class="external-link">hoodscanR</a></span><span class="op">)</span></span>
 <span></span>
@@ -963,24 +959,24 @@ method.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://davislaboratory.github.io/hoodscanR/reference/clustByHood.html" class="external-link">clustByHood</a></span><span class="op">(</span><span class="va">lung5</span>, pm_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">neighbourhoods</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">5</span>, val_name <span class="op">=</span> <span class="st">"hoodscanr_region"</span><span class="op">)</span></span>
 <span><span class="co"># plot predictions</span></span>
-<span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">hoodscanr_region</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">hoodscanr_region</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span>, na.value <span class="op">=</span> <span class="st">"#333333"</span>, name <span class="op">=</span> <span class="st">"predicted"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Predicted pathology"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">3</span>, override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">region</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">region</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Pathology annotations"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">3</span>, override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Spatial domain identification"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" alt="" width="700"></p>
 <p>The plot above shows that hoodscanR is able to differentiate the key
 regions and is clearly able to delineate the tumour regions. It is also
 able to identify more sophosticated structures such as region 4 which
 was not identified in the pathological annotation.</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://davislaboratory.github.io/hoodscanR/reference/plotProbDist.html" class="external-link">plotProbDist</a></span><span class="op">(</span><span class="va">lung5</span>, pm_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">neighbourhoods</span><span class="op">)</span>, by_cluster <span class="op">=</span> <span class="cn">TRUE</span>, plot_all <span class="op">=</span> <span class="cn">TRUE</span>, show_clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>, val_name <span class="op">=</span> <span class="st">"hoodscanr_region"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" alt="" width="700"></p>
 <p>we see that cluster 5 is entirely defined by the presence of
 malignant cells while cluster 4 is composed of immune cells,
 particularly B cells, T cells and plasma cells, indicating the formation
@@ -991,17 +987,17 @@ profile, these can be beneficial for patients.</p>
 <code class="sourceCode R"><span><span class="co"># calculate metrics of heterogeneity - entropy</span></span>
 <span><span class="va">lung5</span> <span class="op">=</span> <span class="fu"><a href="https://davislaboratory.github.io/hoodscanR/reference/calcMetrics.html" class="external-link">calcMetrics</a></span><span class="op">(</span><span class="va">lung5</span>, pm_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">neighbourhoods</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># plot metric</span></span>
-<span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">cell_type</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">cell_type</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Paired"</span>, na.value <span class="op">=</span> <span class="st">"#333333"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Predicted cell type"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">entropy</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">entropy</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"G"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Cell type heterogeneity"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Cell type heterogeneity"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-27-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-27-1.png" class="r-plt" alt="" width="700"></p>
 <p>Looking at the heterogeneity of cell types across space, we see that
 cell composition is very homogeneous within the tumour regions while it
 is highest in the lymphoid aggregates which are often characterised by
@@ -1033,7 +1029,8 @@ graph-clustering is a relatively simple, yet powerful approach that
 scales to large datasets. Banksy is one such algorithm that first shares
 information within a local neighbourhood, and then performs a standard
 single-cell RNA-seq inspired graph-based clustering to identify spatial
-domains <span class="citation">(Singhal et al. 2024)</span>.</p>
+domains <span class="citation">(<span class="nocase">Singhal et
+al.</span> 2024)</span>.</p>
 <p>The following key parameters determine the final clustering
 results:</p>
 <ol style="list-style-type: decimal">
@@ -1079,12 +1076,12 @@ variation is minimal within this range.</li>
 <span><span class="co"># store to the column banksy_region</span></span>
 <span><span class="va">lung5</span><span class="op">$</span><span class="va">banksy_region</span> <span class="op">=</span> <span class="va">lung5</span><span class="op">$</span><span class="va">`clust_M0_lam0.2_k50_res0.4`</span></span>
 <span></span>
-<span><span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">banksy_region</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">banksy_region</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span>, na.value <span class="op">=</span> <span class="st">"#333333"</span>, name <span class="op">=</span> <span class="st">"predicted"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Mean from SpaNorm model"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="" width="700"></p>
 <p>Try varying the parameters to see how the clustering changes. Do note
 that the results are automatically stored in a new column in the
 colData. Unfortunately, the function does not allow specification of the
@@ -1108,17 +1105,17 @@ clusters across the tissue. It is worth remembering that this workshop
 only provides a demonstration of methods. When methods are optimised and
 run on more data, perfomance will vary and will generally improve.</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">banksy_region</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">banksy_region</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span>, na.value <span class="op">=</span> <span class="st">"#333333"</span>, name <span class="op">=</span> <span class="st">"predicted"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Predicted pathology"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">3</span>, override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://bhuvad.github.io/spaNorm/reference/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">region</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SpaNorm/man/plotSpatial.html" class="external-link">plotSpatial</a></span><span class="op">(</span><span class="va">lung5</span>, colour <span class="op">=</span> <span class="va">region</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Pathology annotations"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">3</span>, override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Spatial domain identification"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" width="700"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" alt="" width="700"></p>
 <p>The choice of the better approach amongst the two demonstrated here
 should be based on the question of interest. They both have their
 strengths and limitations. BANKSY allows us to identify within tumour
@@ -1215,7 +1212,7 @@ adjacent tumour regions respectively.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Paired"</span>, na.value <span class="op">=</span> <span class="st">"#333333"</span>, name <span class="op">=</span> <span class="st">"cluster"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" width="768"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" alt="" width="768"></p>
 <p>Next we compare T cells from region 4 (lymphoid aggregates) against
 those from region 3 (dispersed). Investigating and visualising the top
 genes shows that <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=FYB1" class="external-link"><em>FYB1</em></a>,
@@ -1251,7 +1248,7 @@ activity and infiltration of T cells in the lymphoid aggregates.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Paired"</span>, na.value <span class="op">=</span> <span class="st">"#333333"</span>, name <span class="op">=</span> <span class="st">"cluster"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" width="768"></p>
+<p><img src="workflow_spatial_cosmx_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" alt="" width="768"></p>
 </div>
 <div class="section level2">
 <h2 id="functional-analysis">Functional analysis<a class="anchor" aria-label="anchor" href="#functional-analysis"></a>
@@ -1281,15 +1278,15 @@ analysis on the factor loadings to explain the biological processes.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="packages-used">Packages used<a class="anchor" aria-label="anchor" href="#packages-used"></a>
 </h2>
-<p>This workflow depends on various packages from version 3.22 of the
-Bioconductor project, running on R version 4.5.2 (2025-10-31) or higher.
+<p>This workflow depends on various packages from version 3.23 of the
+Bioconductor project, running on R version 4.6.1 (2026-06-24) or higher.
 The complete list of the packages used for this workflow are shown
 below:</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## R version 4.5.2 (2025-10-31)</span></span>
+<pre><code><span><span class="co">## R version 4.6.1 (2026-06-24)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">## Running under: Ubuntu 24.04.3 LTS</span></span>
+<span><span class="co">## Running under: Ubuntu 24.04.5 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -1309,120 +1306,95 @@ below:</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] Banksy_1.6.0                       hoodscanR_1.7.2                   </span></span>
-<span><span class="co">##  [3] CosMxSpatialAnalysisWorkshop_1.0.0 singscore_1.30.0                  </span></span>
-<span><span class="co">##  [5] SpaNorm_1.3.4                      SpatialExperiment_1.20.0          </span></span>
-<span><span class="co">##  [7] SingleR_2.12.0                     standR_1.14.0                     </span></span>
-<span><span class="co">##  [9] scater_1.38.0                      scran_1.38.0                      </span></span>
-<span><span class="co">## [11] scuttle_1.20.0                     SingleCellExperiment_1.32.0       </span></span>
-<span><span class="co">## [13] SummarizedExperiment_1.40.0        Biobase_2.70.0                    </span></span>
-<span><span class="co">## [15] GenomicRanges_1.62.0               Seqinfo_1.0.0                     </span></span>
-<span><span class="co">## [17] IRanges_2.44.0                     S4Vectors_0.48.0                  </span></span>
-<span><span class="co">## [19] BiocGenerics_0.56.0                generics_0.1.4                    </span></span>
-<span><span class="co">## [21] MatrixGenerics_1.22.0              matrixStats_1.5.0                 </span></span>
-<span><span class="co">## [23] patchwork_1.3.2                    ggplot2_4.0.1                     </span></span>
+<span><span class="co">##  [1] Banksy_1.8.1                       hoodscanR_1.7.2                   </span></span>
+<span><span class="co">##  [3] CosMxSpatialAnalysisWorkshop_1.0.0 singscore_1.32.0                  </span></span>
+<span><span class="co">##  [5] SpaNorm_1.7.16                     SpatialExperiment_1.22.0          </span></span>
+<span><span class="co">##  [7] SingleR_2.14.2                     standR_1.16.0                     </span></span>
+<span><span class="co">##  [9] scater_1.40.2                      scran_1.40.0                      </span></span>
+<span><span class="co">## [11] scuttle_1.22.0                     SingleCellExperiment_1.34.0       </span></span>
+<span><span class="co">## [13] SummarizedExperiment_1.42.0        Biobase_2.72.0                    </span></span>
+<span><span class="co">## [15] GenomicRanges_1.64.0               Seqinfo_1.2.0                     </span></span>
+<span><span class="co">## [17] IRanges_2.46.0                     S4Vectors_0.50.3                  </span></span>
+<span><span class="co">## [19] BiocGenerics_0.58.1                generics_0.1.4                    </span></span>
+<span><span class="co">## [21] MatrixGenerics_1.24.0              matrixStats_1.5.0                 </span></span>
+<span><span class="co">## [23] patchwork_1.3.2                    ggplot2_4.0.3                     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] RColorBrewer_1.1-3        jsonlite_2.0.0           </span></span>
-<span><span class="co">##   [3] magrittr_2.0.4            ggbeeswarm_0.7.2         </span></span>
-<span><span class="co">##   [5] magick_2.9.0              farver_2.1.2             </span></span>
-<span><span class="co">##   [7] rmarkdown_2.30            fs_1.6.6                 </span></span>
-<span><span class="co">##   [9] ragg_1.5.0                vctrs_0.6.5              </span></span>
-<span><span class="co">##  [11] memoise_2.0.1             DelayedMatrixStats_1.32.0</span></span>
-<span><span class="co">##  [13] prettydoc_0.4.1           htmltools_0.5.8.1        </span></span>
-<span><span class="co">##  [15] S4Arrays_1.10.0           BiocNeighbors_2.4.0      </span></span>
-<span><span class="co">##  [17] SparseArray_1.10.1        sass_0.4.10              </span></span>
-<span><span class="co">##  [19] bslib_0.9.0               htmlwidgets_1.6.4        </span></span>
-<span><span class="co">##  [21] desc_1.4.3                plyr_1.8.9               </span></span>
-<span><span class="co">##  [23] cachem_1.1.0              igraph_2.2.1             </span></span>
-<span><span class="co">##  [25] lifecycle_1.0.4           pkgconfig_2.0.3          </span></span>
-<span><span class="co">##  [27] rsvd_1.0.5                Matrix_1.7-4             </span></span>
-<span><span class="co">##  [29] R6_2.6.1                  fastmap_1.2.0            </span></span>
-<span><span class="co">##  [31] aricode_1.0.3             digest_0.6.38            </span></span>
-<span><span class="co">##  [33] AnnotationDbi_1.72.0      dqrng_0.4.1              </span></span>
-<span><span class="co">##  [35] RSpectra_0.16-2           irlba_2.3.5.1            </span></span>
-<span><span class="co">##  [37] textshaping_1.0.4         RSQLite_2.4.4            </span></span>
-<span><span class="co">##  [39] beachmat_2.26.0           sccore_1.0.6             </span></span>
-<span><span class="co">##  [41] labeling_0.4.3            httr_1.4.7               </span></span>
-<span><span class="co">##  [43] abind_1.4-8               compiler_4.5.2           </span></span>
-<span><span class="co">##  [45] bit64_4.6.0-1             withr_3.0.2              </span></span>
-<span><span class="co">##  [47] S7_0.2.1                  BiocParallel_1.44.0      </span></span>
-<span><span class="co">##  [49] viridis_0.6.5             DBI_1.2.3                </span></span>
-<span><span class="co">##  [51] DelayedArray_0.36.0       rjson_0.2.23             </span></span>
-<span><span class="co">##  [53] bluster_1.20.0            tools_4.5.2              </span></span>
-<span><span class="co">##  [55] vipor_0.4.7               beeswarm_0.4.0           </span></span>
-<span><span class="co">##  [57] glue_1.8.0                dbscan_1.2.3             </span></span>
-<span><span class="co">##  [59] grid_4.5.2                cluster_2.1.8.1          </span></span>
-<span><span class="co">##  [61] reshape2_1.4.5            gtable_0.3.6             </span></span>
-<span><span class="co">##  [63] tidyr_1.3.1               data.table_1.17.8        </span></span>
-<span><span class="co">##  [65] BiocSingular_1.26.0       ScaledMatrix_1.18.0      </span></span>
-<span><span class="co">##  [67] metapod_1.18.0            XVector_0.50.0           </span></span>
-<span><span class="co">##  [69] RcppAnnoy_0.0.22          RANN_2.6.2               </span></span>
-<span><span class="co">##  [71] ggrepel_0.9.6             pillar_1.11.1            </span></span>
-<span><span class="co">##  [73] stringr_1.6.0             limma_3.66.0             </span></span>
-<span><span class="co">##  [75] RcppHungarian_0.3         splines_4.5.2            </span></span>
-<span><span class="co">##  [77] dplyr_1.1.4               lattice_0.22-7           </span></span>
-<span><span class="co">##  [79] bit_4.6.0                 annotate_1.88.0          </span></span>
-<span><span class="co">##  [81] tidyselect_1.2.1          locfit_1.5-9.12          </span></span>
-<span><span class="co">##  [83] Biostrings_2.78.0         knitr_1.50               </span></span>
-<span><span class="co">##  [85] gridExtra_2.3             edgeR_4.8.0              </span></span>
-<span><span class="co">##  [87] scattermore_1.2           xfun_0.54                </span></span>
-<span><span class="co">##  [89] statmod_1.5.1             stringi_1.8.7            </span></span>
-<span><span class="co">##  [91] yaml_2.3.10               evaluate_1.0.5           </span></span>
-<span><span class="co">##  [93] codetools_0.2-20          tibble_3.3.0             </span></span>
-<span><span class="co">##  [95] BiocManager_1.30.27       graph_1.88.0             </span></span>
-<span><span class="co">##  [97] cli_3.6.5                 uwot_0.2.4               </span></span>
-<span><span class="co">##  [99] leidenAlg_1.1.5           xtable_1.8-4             </span></span>
-<span><span class="co">## [101] systemfonts_1.3.1         jquerylib_0.1.4          </span></span>
-<span><span class="co">## [103] Rcpp_1.1.0                png_0.1-8                </span></span>
-<span><span class="co">## [105] XML_3.99-0.20             parallel_4.5.2           </span></span>
-<span><span class="co">## [107] pkgdown_2.2.0             blob_1.2.4               </span></span>
-<span><span class="co">## [109] mclust_6.1.2              ggalluvial_0.12.5        </span></span>
-<span><span class="co">## [111] sparseMatrixStats_1.22.0  viridisLite_0.4.2        </span></span>
-<span><span class="co">## [113] GSEABase_1.72.0           scales_1.4.0             </span></span>
-<span><span class="co">## [115] purrr_1.2.0               crayon_1.5.3             </span></span>
-<span><span class="co">## [117] rlang_1.1.6               cowplot_1.2.0            </span></span>
-<span><span class="co">## [119] KEGGREST_1.50.0</span></span></code></pre>
+<span><span class="co">##   [1] RColorBrewer_1.1-3   jsonlite_2.0.0       magrittr_2.0.5      </span></span>
+<span><span class="co">##   [4] ggbeeswarm_0.7.3     magick_2.9.1         farver_2.1.2        </span></span>
+<span><span class="co">##   [7] rmarkdown_2.32       fs_2.1.0             ragg_1.5.2          </span></span>
+<span><span class="co">##  [10] vctrs_0.7.3          memoise_2.0.1        prettydoc_0.4.1     </span></span>
+<span><span class="co">##  [13] htmltools_0.5.9      S4Arrays_1.12.1      BiocNeighbors_2.6.0 </span></span>
+<span><span class="co">##  [16] SparseArray_1.12.3   sass_0.4.10          bslib_0.12.0        </span></span>
+<span><span class="co">##  [19] htmlwidgets_1.6.4    desc_1.4.3           plyr_1.8.9          </span></span>
+<span><span class="co">##  [22] cachem_1.1.0         igraph_2.3.4         lifecycle_1.0.5     </span></span>
+<span><span class="co">##  [25] pkgconfig_2.0.3      rsvd_1.0.6           Matrix_1.7-5        </span></span>
+<span><span class="co">##  [28] R6_2.6.1             fastmap_1.2.0        aricode_1.1.0       </span></span>
+<span><span class="co">##  [31] digest_0.6.39        AnnotationDbi_1.74.0 dqrng_0.4.1         </span></span>
+<span><span class="co">##  [34] RSpectra_0.16-2      irlba_2.4.1          textshaping_1.0.5   </span></span>
+<span><span class="co">##  [37] RSQLite_3.53.3       beachmat_2.28.0      sccore_1.0.7        </span></span>
+<span><span class="co">##  [40] labeling_0.4.3       httr_1.4.9           abind_1.4-8         </span></span>
+<span><span class="co">##  [43] compiler_4.6.1       bit64_4.8.6          withr_3.0.3         </span></span>
+<span><span class="co">##  [46] S7_0.2.2             BiocParallel_1.46.0  viridis_0.6.5       </span></span>
+<span><span class="co">##  [49] DBI_1.3.0            DelayedArray_0.38.2  rjson_0.2.23        </span></span>
+<span><span class="co">##  [52] bluster_1.22.0       tools_4.6.1          vipor_0.4.7         </span></span>
+<span><span class="co">##  [55] otel_0.2.0           beeswarm_0.4.0       glue_1.8.1          </span></span>
+<span><span class="co">##  [58] dbscan_1.2.7         grid_4.6.1           cluster_2.1.8.2     </span></span>
+<span><span class="co">##  [61] reshape2_1.4.5       gtable_0.3.6         tidyr_1.3.2         </span></span>
+<span><span class="co">##  [64] data.table_1.18.6.1  BiocSingular_1.28.1  ScaledMatrix_1.20.0 </span></span>
+<span><span class="co">##  [67] metapod_1.20.0       XVector_0.52.0       RcppAnnoy_0.0.23    </span></span>
+<span><span class="co">##  [70] RANN_2.6.3           ggrepel_0.9.8        pillar_1.11.1       </span></span>
+<span><span class="co">##  [73] stringr_1.6.0        limma_3.68.5         RcppHungarian_0.3   </span></span>
+<span><span class="co">##  [76] splines_4.6.1        dplyr_1.2.1          lattice_0.22-9      </span></span>
+<span><span class="co">##  [79] bit_4.6.0            annotate_1.90.0      tidyselect_1.2.1    </span></span>
+<span><span class="co">##  [82] locfit_1.5-9.12      Biostrings_2.80.2    knitr_1.52          </span></span>
+<span><span class="co">##  [85] gridExtra_2.3.1      edgeR_4.10.6         scattermore_1.2     </span></span>
+<span><span class="co">##  [88] xfun_0.62            statmod_1.5.2        stringi_1.8.9       </span></span>
+<span><span class="co">##  [91] yaml_2.3.12          evaluate_1.0.5       codetools_0.2-20    </span></span>
+<span><span class="co">##  [94] tibble_3.3.1         BiocManager_1.30.27  graph_1.90.0        </span></span>
+<span><span class="co">##  [97] cli_3.6.6            uwot_0.2.5           leidenAlg_1.1.8     </span></span>
+<span><span class="co">## [100] xtable_1.8-8         systemfonts_1.3.2    jquerylib_0.1.4     </span></span>
+<span><span class="co">## [103] Rcpp_1.1.2           png_0.1-9            XML_3.99-0.25       </span></span>
+<span><span class="co">## [106] parallel_4.6.1       pkgdown_2.2.1        blob_1.3.0          </span></span>
+<span><span class="co">## [109] mclust_6.1.3         ggalluvial_0.12.6    viridisLite_0.4.3   </span></span>
+<span><span class="co">## [112] GSEABase_1.74.0      scales_1.4.0         purrr_1.2.2         </span></span>
+<span><span class="co">## [115] crayon_1.5.3         rlang_1.3.0          cowplot_1.2.0       </span></span>
+<span><span class="co">## [118] KEGGREST_1.52.2</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-R-rmarkdown" class="csl-entry">
-Allaire, JJ, Yihui Xie, Christophe Dervieux, Jonathan McPherson, Javier
-Luraschi, Kevin Ushey, Aron Atkins, et al. 2025. <em>Rmarkdown: Dynamic
-Documents for r</em>. <a href="https://github.com/rstudio/rmarkdown" class="external-link">https://github.com/rstudio/rmarkdown</a>.
+Allaire, JJ, Yihui Xie, Christophe Dervieux, et al. 2026. <em>Rmarkdown:
+Dynamic Documents for r</em>. <a href="https://github.com/rstudio/rmarkdown" class="external-link">https://github.com/rstudio/rmarkdown</a>.
 </div>
 <div id="ref-amezquita2020orchestrating" class="csl-entry">
-Amezquita, Robert A, Aaron TL Lun, Etienne Becht, Vince J Carey, Lindsay
-N Carpp, Ludwig Geistlinger, Federico Marini, et al. 2020.
-<span>“Orchestrating Single-Cell Analysis with Bioconductor.”</span>
-<em>Nature Methods</em> 17 (2): 137–45.
+<span class="nocase">Amezquita, Robert A, Aaron TL Lun, Etienne Becht,
+et al.</span> 2020. <span>“Orchestrating Single-Cell Analysis with
+Bioconductor.”</span> <em>Nature Methods</em> 17 (2): 137–45.
 </div>
 <div id="ref-aran2019reference" class="csl-entry">
-Aran, Dvir, Agnieszka P Looney, Leqian Liu, Esther Wu, Valerie Fong,
-Austin Hsu, Suzanna Chak, et al. 2019. <span>“Reference-Based Analysis
-of Lung Single-Cell Sequencing Reveals a Transitional Profibrotic
-Macrophage.”</span> <em>Nature Immunology</em> 20 (2): 163–72.
+<span class="nocase">Aran, Dvir, Agnieszka P Looney, Leqian Liu, et
+al.</span> 2019. <span>“Reference-Based Analysis of Lung Single-Cell
+Sequencing Reveals a Transitional Profibrotic Macrophage.”</span>
+<em>Nature Immunology</em> 20 (2): 163–72.
 </div>
 <div id="ref-bhuva2024library" class="csl-entry">
-Bhuva, Dharmesh D, Chin Wee Tan, Agus Salim, Claire Marceaux, Marie A
-Pickering, Jinjin Chen, Malvika Kharbanda, et al. 2024. <span>“Library
-Size Confounds Biology in Spatial Transcriptomics Data.”</span>
-<em>Genome Biology</em> 25 (1): 99.
+<span class="nocase">Bhuva, Dharmesh D, Chin Wee Tan, Agus Salim, et
+al.</span> 2024. <span>“Library Size Confounds Biology in Spatial
+Transcriptomics Data.”</span> <em>Genome Biology</em> 25 (1): 99.
 </div>
 <div id="ref-fu2024bidcell" class="csl-entry">
-Fu, Xiaohang, Yingxin Lin, David M Lin, Daniel Mechtersheimer, Chuhan
-Wang, Farhan Ameen, Shila Ghazanfar, Ellis Patrick, Jinman Kim, and Jean
-YH Yang. 2024. <span>“BIDCell: Biologically-Informed Self-Supervised
-Learning for Segmentation of Subcellular Spatial Transcriptomics
-Data.”</span> <em>Nature Communications</em> 15 (1): 509.
+Fu, Xiaohang, Yingxin Lin, David M Lin, et al. 2024. <span>“BIDCell:
+Biologically-Informed Self-Supervised Learning for Segmentation of
+Subcellular Spatial Transcriptomics Data.”</span> <em>Nature
+Communications</em> 15 (1): 509.
 </div>
 <div id="ref-liu2024hoodscanr" class="csl-entry">
-Liu, Ning, Jarryd Martin, Dharmesh D Bhuva, Jinjin Chen, Mengbo Li,
-Samuel C Lee, Malvika Kharbanda, et al. 2024. <span>“hoodscanR:
-Profiling Single-Cell Neighborhoods in Spatial Transcriptomics
-Data.”</span> <em>bioRxiv</em>, 2024–03.
+<span class="nocase">Liu, Ning, Jarryd Martin, Dharmesh D Bhuva, et
+al.</span> 2024. <span>“hoodscanR: Profiling Single-Cell Neighborhoods
+in Spatial Transcriptomics Data.”</span> <em>bioRxiv</em>, 2024–03.
 </div>
 <div id="ref-R-prettydoc" class="csl-entry">
 Qiu, Yixuan. 2021. <em>Prettydoc: Creating Pretty Documents from r
@@ -1435,9 +1407,9 @@ Normalisation for Spatial Transcriptomics Data.”</span>
 <em>bioRxiv</em>, 2024–05.
 </div>
 <div id="ref-singhal2024banksy" class="csl-entry">
-Singhal, Vipul, Nigel Chou, Joseph Lee, Yifei Yue, Jinyue Liu, Wan Kee
-Chock, Li Lin, et al. 2024. <span>“BANKSY Unifies Cell Typing and Tissue
-Domain Segmentation for Scalable Spatial Omics Data Analysis.”</span>
+<span class="nocase">Singhal, Vipul, Nigel Chou, Joseph Lee, et
+al.</span> 2024. <span>“BANKSY Unifies Cell Typing and Tissue Domain
+Segmentation for Scalable Spatial Omics Data Analysis.”</span>
 <em>Nature Genetics</em> 56 (3): 431–41.
 </div>
 <div id="ref-totty2024spotsweeper" class="csl-entry">
@@ -1452,13 +1424,12 @@ Single-Cell RNA-Seq Based on a Multinomial Model.”</span> <em>Genome
 Biology</em> 20 (1): 295.
 </div>
 <div id="ref-R-ggplot2" class="csl-entry">
-Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen,
-Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, Dewey
-Dunnington, and Teun van den Brand. 2025. <em>Ggplot2: Create Elegant
-Data Visualisations Using the Grammar of Graphics</em>. <a href="https://ggplot2.tidyverse.org" class="external-link">https://ggplot2.tidyverse.org</a>.
+<span class="nocase">Wickham, Hadley, Winston Chang, Lionel Henry, et
+al.</span> 2026. <em>Ggplot2: Create Elegant Data Visualisations Using
+the Grammar of Graphics</em>. <a href="https://ggplot2.tidyverse.org" class="external-link">https://ggplot2.tidyverse.org</a>.
 </div>
 <div id="ref-R-knitr" class="csl-entry">
-Xie, Yihui. 2025. <em>Knitr: A General-Purpose Package for Dynamic
+Xie, Yihui. 2026. <em>Knitr: A General-Purpose Package for Dynamic
 Report Generation in r</em>. <a href="https://yihui.org/knitr/" class="external-link">https://yihui.org/knitr/</a>.
 </div>
 </div>
@@ -1475,12 +1446,12 @@ Report Generation in r</em>. <a href="https://yihui.org/knitr/" class="external-
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Dharmesh D. Bhuva, Jiadong Mao, Melody Jin, Chin Wee Tan.</p>
+<p>Developed by Dharmesh D. Bhuva, Aaron Kilgallon, Melody Jin, Chin Wee Tan.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer>

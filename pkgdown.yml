@@ -1,11 +1,11 @@
-pandoc: 3.1.11
-pkgdown: 2.2.0
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   Differentially_expression_analysis: Differentially_expression_analysis.html
-  Part_II_PhiSpace: Part_II_PhiSpace.html
+  Part_III_Feature_selection: Part_III_Feature_selection.html
   workflow_spatial_cosmx: workflow_spatial_cosmx.html
-last_built: 2025-11-20T04:18Z
+last_built: 2026-10-21T02:01Z
 urls:
-  reference: https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop/reference
-  article: https://github.com/bhuvad/CosMxSpatialAnalysisWorkshop/articles
+  reference: https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/reference
+  article: https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/articles
