@@ -48,7 +48,7 @@ Spatial transcriptomics is a revolutionary technology that allows us to measure 
 - **Multiple analytical approaches**  
   jazzPanda provides two complementary methods for marker detection:
   - **Correlation-based approach**: Identifies genes whose spatial expression patterns correlate with cluster distributions using permutation testing for statistical significance.
-  - **Linear modeling approach**: Uses linear modelling to find genes that best predict cluster membership while accounting for spatial relationships.
+  - **Linear modeling approach**: Models each gene's spatial vector as a combination of the cluster vectors, and assigns the gene to the cluster with the largest coefficient.
 
 - **Background correction**  
   Spatial transcriptomics data often contains technical noise and artifacts. jazzPanda addresses this by:
@@ -68,7 +68,6 @@ Spatial transcriptomics is a revolutionary technology that allows us to measure 
   - Square binning for regular tissue regions
   - Hexagonal binning for more natural cell arrangements
   - Customizable bin sizes to match tissue characteristics
-  - Adaptive binning based on cell density
   
 ## Workshop Overview
 
@@ -140,6 +139,10 @@ defined_theme <- theme(
   panel.grid.minor = element_blank(),
   plot.background = element_blank()
 )
+
+# Width/height ratio of a spatial region, used to size panels so that
+# spatial plots keep the true shape of the cropped region
+xy_ratio <- function(d) diff(range(d$x)) / diff(range(d$y))
 
 # Function to automatically determine hex bin size based on data density
 auto_hex_bin <- function(n, target_points_per_bin = 1, min_bins=20, scale=5) {
@@ -310,14 +313,15 @@ cat("\n\n### Spatial Coverage Summary\n\n",
 
 
 ## Visualize Spatial Distribution of Clusters
-Understanding the spatial organization of cell type clusters is essential before marker gene detection. This visualization reveals tissue architecture, identifies spatial patterns, validates cluster assignments, and guides interpretation of subsequent analyses. The spatial arrangement of cell types reflects functional relationships, tissue boundaries, microenvironmental niches, and disease states, all of which influence marker gene patterns.
+Before detecting marker genes, it is useful to see where each cluster sits in the region. The plots below show the cells of each cluster across the whole cropped region, which gives context for the spatial correlations and marker genes that follow.
 
-```{r spatial_clusters, fig.width=10, fig.height=7}
+```{r spatial_clusters, fig.width=10, fig.height=10}
 # Spatial distribution plot
 ggplot(data = r1_cells, aes(x = x, y = y, colour = cluster)) +
   geom_point(size = 0.5) +
   scale_colour_brewer(palette = "Dark2") +
-  facet_wrap(~cluster, ncol = 3, scales = "free") +
+  facet_wrap(~cluster, ncol = 3) +
+  coord_fixed() +
   theme_classic() +
   theme(legend.position = "none") +
   labs(title = "Spatial Distribution of Clusters - Lung5_Rep1 subset",
@@ -431,7 +435,7 @@ cat("\n=== SPATIAL BINNING SUMMARY ===\n",
 ```
 
 ## Cluster-Cluster Correlation Analysis
-To better understand how different cell clusters are organized within the tissue, we compute the spatial correlation between their binned abundance profiles. This highlights whether specific clusters tend to co-localize or occupy distinct spatial niches. A high positive correlation suggests that two clusters frequently appear in the same spatial regions, possibly indicating shared biological roles or transitional cell states. Conversely, a strong negative correlation may reflect spatial separation or compartmentalization.
+To see how the clusters are arranged relative to each other, we compute the spatial correlation between their binned cell counts. A high positive correlation means that two clusters tend to appear in the same spatial bins, while a strong negative correlation means that they tend to occupy different parts of the region.
 
 If many clusters exhibit consistently high positive correlations, this may indicate that the data has been overclustered—i.e., multiple clusters are capturing the same underlying cell population. In such cases, it may be helpful to revisit the clustering resolution.
 
@@ -474,9 +478,9 @@ corrplot::corrplot(
 )
 
 ```
-The spatial correlation heatmap reveals how clusters co-localize or segregate across the tissue. Notably, clusters c3 and c4 show the strongest positive correlation in this region (r = 0.26); although weak, it suggests they tend to occupy overlapping spatial regions. This is consistent with the spatial plots, where both clusters are enriched along the upper and right edges of the section—potentially reflecting functionally related or spatially adjacent cell types. In contrast, clusters c8 and c4 (r = -0.37) and c8 and c3 (r = -0.32) display negative correlations, indicating mutually exclusive spatial patterns. This is visually supported by the spatial map, where c8 forms a dense central structure, while c3 and c4 are more peripherally distributed. Other cluster pairs, such as c1 and c8 or c6 and c8, also show weak negative correlations, reflecting spatial separation.
+The heatmap shows how the clusters co-locate within this region. The strongest positive correlation is between c3 and c4 (r = 0.26); although weak, it is consistent with the spatial plots, where both clusters are enriched along the upper and right edges of the region. In contrast, c8 is negatively correlated with c4 (r = -0.37) and c3 (r = -0.32): c8 forms a dense structure in the center of the region, while c3 and c4 sit towards its edges. Other pairs, such as c1 and c8 or c6 and c8, show weak negative correlations.
 
-Overall, the correlation structure suggests that most clusters occupy distinct spatial domains, with only a few showing significant overlap. This supports the current clustering resolution as appropriate—there is no strong evidence of overclustering, which would typically manifest as widespread high correlations between clusters. Instead, the results point to a meaningful spatial partitioning of cell types, which can now be further interpreted in the context of tissue architecture or marker gene expression.
+Overall, most cluster pairs have correlations close to zero or below, so the clusters largely occupy different parts of the region. There is no sign of overclustering, which would show up as many strong positive correlations between clusters.
 
 ## Cluster-Gene Correlation Analysis
 
@@ -695,15 +699,21 @@ for (cl in cluster_names) {
 }
 ```
 
-Cluster c1 shows strong spatial correlation with classic lymphoid markers such as IL7R, PTPRC, and CD2, suggesting a robust presence of T cells, likely involved in immune surveillance or infiltration. Cluster c2 lacks clear spatially enriched markers, which may reflect a heterogeneous or transitional cell population, possibly at the interface of tumor and stroma. Cluster c3 is enriched for genes like CD163 and C1QA/B/C, indicating a population of tumor-associated macrophages, potentially contributing to immunosuppressive or tissue-remodeling functions.
+For most clusters, the top spatially correlated genes are well-known markers of a cell type, which is a useful check on the cluster labels:
 
-Cluster c4 is characterized by high spatial correlation with CXCL8, a pro-inflammatory chemokine, hinting at an inflammatory microenvironment that could influence tumor progression or immune cell recruitment. Cluster c6 expresses high levels of FN1 and collagens (COL1A1, COL5A1), pointing to a fibroblast-like or CAF population involved in ECM remodeling and structural support. Cluster c7 has no significantly correlated genes, even with the relaxed threshold. Its cells form thin, scattered strands interspersed with the tumor region rather than a compact spatial domain, which may explain the lack of a spatial correlation signal.
+- **c1**: IL7R, PTPRC, CD37, FYN and CD2, which are lymphocyte genes (IL7R and CD2 are typical of T cells).
+- **c3**: GPNMB, C1QB, C1QC, C1QA and CD163, which are typical macrophage genes.
+- **c4**: CXCL8 is the only gene above the strict threshold.
+- **c6**: COL1A1, FN1 and COL5A1, extracellular matrix genes typical of fibroblasts, pass only the relaxed threshold.
+- **c8**: TM4SF1, EPCAM, CDH1, SOX9 and ITGA3 have the highest correlations of any cluster (r ≈ 0.86–0.89). EPCAM and CDH1 are epithelial markers, and c8 forms the large, compact structure in the center of the region.
+- **c9**: IGHG2, IGHG1 and MZB1, which are typical of plasma cells, pass only the relaxed threshold.
+- **c2** and **c7**: no gene passes either threshold. c2 has only 33 cells in this region, and c7 cells form thin, scattered strands rather than a compact domain, so neither cluster has a strong spatial correlation with any gene.
 
-Cluster c8 shows a strong epithelial gene signature with markers like EPCAM, CDH1, and SOX9, consistent with differentiated tumor cells, potentially with stem-like features. Finally, cluster c9 stands out with high expression of immunoglobulin genes (IGHG1, IGHG2) and MZB1, indicative of plasma cells or plasmablasts, suggesting local antibody production and humoral immune activity. Together, these clusters reflect a spatially organized and biologically diverse landscape of tumor, immune, and stromal elements, underscoring the complex cellular interactions within the cancer microenvironment.
+Because this is a small cropped region, these correlations describe how genes and clusters co-locate within this window, not tissue-wide biology.
 
 ### Visualize Top Marker Genes
 
-This section creates spatial plots showing the expression patterns of the top marker genes identified by correaltion approach. 
+This section creates spatial plots showing the expression patterns of the top marker genes identified by the correlation approach. 
 ```{r permutation_visualization, fig.width=15, fig.height=4}
 # ============================================================================
 # SPATIAL VISUALIZATION OF TOP MARKER GENES
@@ -755,6 +765,8 @@ for (cl in cluster_names) {
             geom_hex(bins = auto_hex_bin(nrow(data_vis))) +
             facet_wrap(~text) +
             scale_y_reverse() +
+            expand_limits(x = range(r1_cells$x), y = range(r1_cells$y)) +
+            coord_fixed() +
             scale_fill_viridis_c(option = "plasma", trans = "sqrt", direction = -1) +
       guides(fill = guide_colorbar(height = grid::unit(5, "cm"))) +
             defined_theme +
@@ -767,6 +779,8 @@ for (cl in cluster_names) {
       geom_point(size = 0.2) +
       facet_wrap(~cluster) +
       scale_y_reverse() +
+      expand_limits(x = range(r1_cells$x), y = range(r1_cells$y)) +
+      coord_fixed() +
       scale_color_manual(values = "black") +
             defined_theme +
       labs(title = paste("Cluster", cl, "spatial distribution"))
@@ -791,11 +805,11 @@ for (cl in cluster_names) {
 
 ## Method 2: Linear Modeling Approach with Background Correction
 
-The linear modeling approach uses Linear modelling to identify genes that best predict cluster membership while accounting for background noise using negative control probes.
+The linear modelling approach models each gene's spatial vector as a combination of the cluster vectors, while accounting for background noise using negative control probes. Each gene's top cluster is the cluster with the largest coefficient.
 
 ### Prepare Background Data
 
-```{r background_preparation, fig.width=15, fig.height=8}
+```{r background_preparation, fig.width=15, fig.height=12}
 # Extract negative control probe data
 r1_nc_tx = r1_tx[r1_tx$gene %in% nc_names, ]
 
@@ -804,6 +818,7 @@ ggplot(data = r1_nc_tx, aes(x = x, y = y)) +
   geom_point(size = 0.2) +
   facet_wrap(~feature_name, ncol = 5) +
   scale_y_reverse() +
+  coord_fixed() +
   theme_classic() +
   defined_theme +
   labs(title = "Spatial Distribution of Negative Control Probes")
@@ -907,11 +922,18 @@ for (cl in cluster_names) {
 }
 
 ```
-Cluster c1 expresses CD74, HLA-B, and HLA-C, suggesting an immune population with active antigen-presentation machinery. CD74 is the MHC class II invariant chain, while HLA-B and HLA-C encode MHC class I molecules; together with the lymphoid markers found by the correlation approach (IL7R, PTPRC, CD2), this indicates active immune engagement, potentially linked to antigen processing and T cell interaction.
+The linear model largely agrees with the correlation approach for clusters with clear markers, and it also reports candidate markers for some clusters that had none:
 
-Cluster c3, marked by PSAP, C1QA, and C1QC, again points to a macrophage-rich compartment, likely involved in phagocytic and immunomodulatory functions within the tumor. Similarly, cluster c4, with strong expression of CXCL8, IL1R2, and CCL3L3, reflects a pro-inflammatory myeloid population, potentially involved in leukocyte recruitment and inflammatory cytokine signaling. Cluster c6 shows clear stromal identity with markers such as COL1A1, FN1, and IGFBP7, indicating a fibroblast or cancer-associated fibroblast (CAF) phenotype actively engaged in extracellular matrix organization.
+- **c1**: CD74, HLA-B and HLA-C, which are antigen-presentation genes (CD74 is the MHC class II invariant chain; HLA-B and HLA-C encode MHC class I molecules).
+- **c2**: no marker genes.
+- **c3**: PSAP, C1QA and C1QC; the C1Q genes were also top genes for c3 with the correlation approach.
+- **c4**: CXCL8 has by far the largest coefficient; IL1R2 and CCL3L3 have much smaller ones.
+- **c6**: COL1A1, FN1 and IGFBP7; COL1A1 and FN1 were also found with the correlation approach.
+- **c7**: SERPINA1 has a clearly positive coefficient, while COL12A1 and PDGFB have small ones. c7 had no significant genes with the correlation approach.
+- **c8**: KRT19, OLFM4 and KRT17. KRT19 and KRT17 are epithelial keratins, consistent with the epithelial markers found with the correlation approach.
+- **c9**: IGHG1, IGKC and IGHA1, immunoglobulin genes typical of plasma cells.
 
-Cluster c7, which had no significant markers with the correlation approach, now reveals candidate markers: SERPINA1, COL12A1, and PDGFB, with SERPINA1 having by far the largest coefficient. This combination may suggest a mesenchymal-like or signaling-active subpopulation, possibly involved in extracellular matrix remodeling (COL12A1) or angiogenesis (PDGFB). Cluster c8 continues to show epithelial and cancer-associated markers such as KRT19, OLFM4, and KRT17, reinforcing its identity as a tumor epithelial compartment, potentially with proliferative or invasive potential. Cluster c9 is again defined by immunoglobulin genes IGHG1, IGKC, and IGHA1, strongly supporting the presence of plasma cells or plasmablasts, indicating a local humoral immune response. Cluster c2 remains without clear marker genes, possibly representing a transcriptionally ambiguous or under-characterized population requiring further resolution.
+Genes with large coefficients are the most reliable markers; genes with small coefficients, such as IL1R2, COL12A1 and PDGFB, are weaker candidates.
 
 ### Visualize Top Marker Genes from Linear Modelling
 
@@ -951,6 +973,8 @@ for (cl in cluster_names[cluster_names != "NoSig"])  {
         gene_pt <- ggplot(data = vis_r1, aes(x = x, y = y)) + 
                 geom_hex(bins = auto_hex_bin(nrow(vis_r1))) +
                 facet_wrap(~text_label) +
+                expand_limits(x = range(r1_cells$x), y = range(r1_cells$y)) +
+                coord_fixed() +
                 scale_fill_viridis_c(option = "plasma", trans = "sqrt", direction = -1) +
                 guides(fill = guide_colorbar(height = grid::unit(5, "cm"))) +
                 defined_theme +
@@ -962,6 +986,8 @@ for (cl in cluster_names[cluster_names != "NoSig"])  {
                         aes(x = x, y = y, color = cluster)) +
                 geom_point(size = 0.2) +
                 facet_wrap(~cluster) +
+                expand_limits(x = range(r1_cells$x), y = range(r1_cells$y)) +
+                coord_fixed() +
                 scale_color_manual(values = "black") +
                 defined_theme +
                 labs(title = paste("Cluster", cl, "spatial distribution"))
@@ -1164,13 +1190,19 @@ When multiple replicates are available, jazzPanda can leverage this information 
 cluster_info <- as.data.frame(rbind(r1_cells, r3_cells))
 
 # Visualize spatial distribution across samples
-ggplot(data = cluster_info, aes(x = x, y = y, colour = cluster)) +
-    geom_point(size = 0.3) +
-    scale_colour_brewer(palette = "Dark2") +
-    facet_wrap(~sample, ncol = 2, scales = "free") +
-    guides(colour = guide_legend(override.aes = list(shape = 15, size = 5))) +
-    labs(title = "Spatial Distribution by Sample and Cluster")+
-    theme_classic()
+# (one panel per sample, so each keeps the true shape of its region)
+sample_plots <- lapply(split(cluster_info, cluster_info$sample), function(d) {
+    ggplot(data = d, aes(x = x, y = y, colour = cluster)) +
+        geom_point(size = 0.3) +
+        scale_colour_brewer(palette = "Dark2") +
+        facet_wrap(~sample) +
+        coord_fixed() +
+        guides(colour = guide_legend(override.aes = list(shape = 15, size = 5))) +
+        theme_classic()
+})
+wrap_plots(sample_plots, guides = "collect",
+           widths = sapply(split(cluster_info, cluster_info$sample), xy_ratio)) +
+    plot_annotation(title = "Spatial Distribution by Sample and Cluster")
 
 ```
 
@@ -1267,11 +1299,18 @@ multi_sample_full[multi_sample_full$gene=="EPCAM", ]
 
 multi_sample_full[multi_sample_full$gene=="MZB1", ]
 ```
-Cluster c1 is characterized by MALAT1, CD74, and HLA-B, suggesting a lymphoid or antigen-presenting cell population. CD74 (the MHC class II invariant chain) and HLA-B (an MHC class I molecule) are both part of the antigen-presentation machinery, while MALAT1 is a long non-coding RNA often expressed in immune cells and implicated in T cell activation or regulation. Cluster c2 now has two candidate markers, IGF2 and CENPF, but both have small coefficients and weak spatial correlations, and c2 contains only around 30 cells per sample, so these markers should be treated as tentative. CENPF is a proliferation-associated gene, hinting at a small, possibly proliferating population.
+With both replicates, the results are largely consistent with the single-sample analysis:
 
-Cluster c3 shows clear expression of PSAP, C1QA, and C1QC, aligning with a macrophage or monocyte-derived population. These genes are commonly found in tissue-resident or tumor-associated macrophages, particularly those involved in phagocytosis and immune modulation. Cluster c4 expresses the pro-inflammatory chemokine CXCL8 together with S100A8 and HCAR2, both highly expressed by neutrophils, suggesting a neutrophil-like myeloid population actively participating in inflammation or chemotaxis. Cluster c6, with high levels of COL1A1, FN1, and IGFBP7, reflects a classic fibroblast-like phenotype, potentially representing cancer-associated fibroblasts (CAFs) involved in extracellular matrix remodeling and paracrine signaling.
+- **c1**: MALAT1, CD74 and HLA-B. CD74 and HLA-B were also top markers in Lung5_Rep1 alone, while MALAT1 is a long non-coding RNA that is highly expressed in many cell types, so it is less specific.
+- **c2**: IGF2 and CENPF, but both have small coefficients and weak spatial correlations, and c2 has only about 30 cells in each sample, so these markers are tentative.
+- **c3**: PSAP, C1QA and C1QC, as in the single-sample analysis.
+- **c4**: CXCL8 remains the main marker; S100A8 and HCAR2 have small coefficients.
+- **c6**: COL1A1, FN1 and IGFBP7, as in the single-sample analysis.
+- **c7**: no marker genes. SERPINA1, the main c7 candidate in Lung5_Rep1, is not selected when both replicates are modelled together.
+- **c8**: S100A6, KRT19 and OLFM4; KRT19 and OLFM4 were also top markers in the single-sample analysis.
+- **c9**: IGHG1, IGKC and IGHA1, as in the single-sample analysis.
 
-Cluster c7 did not yield identifiable marker genes under current thresholds, which could indicate a more transcriptionally quiescent population or a mixed/ambiguous identity. Cluster c8 expresses epithelial and tumor-associated markers including S100A6, KRT19, and OLFM4, suggesting it corresponds to a tumor epithelial compartment, possibly with proliferative or stem-like features. Lastly, cluster c9 is defined by immunoglobulin genes IGHG1, IGKC, and IGHA1, indicative of plasma cells or antibody-secreting plasmablasts, pointing to active humoral immune engagement within the tumor microenvironment.
+Markers with large coefficients that are found in both the single-sample and multi-sample analyses, such as C1QA, COL1A1, KRT19 and IGHG1, are the most robust. Markers with small coefficients, or found in only one analysis, should be treated with caution.
 
 ### Visualize Multi-Sample Results
 ```{r multi_sample_visualization, fig.height=5, fig.width=10}
@@ -1319,30 +1358,42 @@ for (cl in cluster_names) {
     p1 <- ggplot(data = vis_r1, aes(x = x, y = y)) + 
             geom_hex(bins = auto_hex_bin(nrow(vis_r1))) +
             facet_wrap(~text_label) +
+            expand_limits(x = range(r1_cells$x), y = range(r1_cells$y)) +
+            coord_fixed() +
             scale_fill_viridis_c(option = "plasma", trans = "sqrt", direction = -1) +
       guides(fill = guide_colorbar(height = grid::unit(5, "cm"))) +
             defined_theme +
       theme(legend.position = "right", legend.title = element_blank()) 
          
     p2 <- ggplot(data = vis_r3, aes(x = x, y = y)) + 
-      geom_hex(bins = auto_hex_bin(nrow(vis_r3))) +
+      # fewer bins along y, so hexagons keep their shape in the wider Lung5_Rep3 region
+      geom_hex(bins = round(auto_hex_bin(nrow(vis_r3)) * c(1, 1 / xy_ratio(r3_cells)))) +
             facet_wrap(~text_label) +
+            expand_limits(x = range(r3_cells$x), y = range(r3_cells$y)) +
+            coord_fixed() +
             scale_fill_viridis_c(option = "plasma", trans = "sqrt", direction = -1) +
-      guides(fill = guide_colorbar(height = grid::unit(5, "cm"))) +
+      guides(fill = guide_colorbar(height = grid::unit(5 / xy_ratio(r3_cells), "cm"))) +
             defined_theme +
       theme(legend.position = "right", legend.title = element_blank()) 
      
     # Create cluster plot
-    cl_pt <- ggplot(data = cluster_info[cluster_info$cluster == cl, ],
-                    aes(x = x, y = y, color = cluster)) +
-      geom_point(size = 0.1) +
-      facet_wrap(~sample, ncol = 1, scales = "free") +
-      scale_color_manual(values = "black") +
-            defined_theme +
-      labs(title = paste("Cluster", cl, "spatial distribution"))
+    # (one panel per sample, each showing the whole region with its true shape)
+    cl_pt <- lapply(split(cluster_info, cluster_info$sample), function(d) {
+      ggplot(data = d[d$cluster == cl, ], aes(x = x, y = y, color = cluster)) +
+        geom_point(size = 0.1) +
+        facet_wrap(~sample) +
+        expand_limits(x = range(d$x), y = range(d$y)) +
+        coord_fixed() +
+        scale_color_manual(values = "black") +
+        defined_theme
+    })
+    cl_pt[[1]] <- cl_pt[[1]] + labs(title = paste("Cluster", cl, "spatial distribution"))
+
+    # Row heights follow each region's height/width ratio so the panels line up
+    region_heights <- 1 / c(xy_ratio(r1_cells), xy_ratio(r3_cells))
     
     # Combine plots
-    stacked_panel = (p1 / p2) 
+    stacked_panel = (p1 / p2) + plot_layout(heights = region_heights) 
         
     # Add empty panels if fewer than 3 features to keep layout consistent
     if (length(inters) == 2) {
@@ -1353,7 +1404,7 @@ for (cl in cluster_names) {
     plot_layout(widths = c(1, 1, 1))
     } 
 
-    lyt <- wrap_plots(cl_pt, ncol = 1) | stacked_panel
+    lyt <- wrap_plots(cl_pt, ncol = 1, heights = region_heights) | stacked_panel
     layout_design <- lyt + patchwork::plot_layout(widths = c(1, 3))
     print(layout_design)
   }
@@ -1365,12 +1416,12 @@ for (cl in cluster_names) {
 This workshop showcased how **jazzPanda** can be used to detect spatially-informed marker genes in spatial transcriptomics data, complementing standard tools like **FindMarkers**.
 
 - **FindMarkers**: Identifies differentially expressed genes between clusters, but does not consider spatial layout.  
-- **jazzPanda**: Detects genes with expression patterns that align with spatial structures and cluster boundaries.
+- **jazzPanda**: Detects genes whose transcripts are spatially distributed like the cells of a cluster.
 
 ### Key Points
 
-1. **Spatial resolution**  
-   jazzPanda highlights genes with spatial expression patterns, revealing insights into tissue organization that standard non-spatial methods may miss.
+1. **Spatial context**
+   jazzPanda uses where transcripts and cells are located, information that non-spatial methods such as FindMarkers ignore.
 
 2. **Two analysis modes**  
    - The **correlation approach** is designed for **single-sample analysis**, identifying genes spatially correlated with clusters.  
@@ -1384,7 +1435,7 @@ This workshop showcased how **jazzPanda** can be used to detect spatially-inform
 
 ---
 
-While many tools are available for marker gene detection, **jazzPanda stands out by incorporating spatial context**, offering deeper biological insight and improving the robustness of marker identification in complex tissue structures.
+jazzPanda complements standard marker gene detection by **incorporating spatial context**. Because this workshop uses small cropped regions, the markers found here illustrate the workflow rather than tissue-wide biology; biological conclusions need the full dataset and further validation.
 
 ```{r}
 sessionInfo()
