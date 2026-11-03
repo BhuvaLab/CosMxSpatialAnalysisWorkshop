@@ -34,6 +34,10 @@ Attendees will require a laptop with internet access and should have familiarity
 | Part 3. Multiple-sample scenario                                     | 45m  |
 | Q & A                                                                | 15m  |
 
+jazzPanda is described in the following preprint:
+
+> Jin X, Putri GH, Cheng J, Asselin-Labat M-L, Smyth GK, Phipson B (2026). jazzPanda: spatially aware marker gene detection for imaging-based spatial transcriptomics. *bioRxiv*. <https://www.biorxiv.org/content/10.64898/2026.02.13.705867v3>
+
 
 ### Session 3 - Selecting clinically relevant features from molecular phenotypes
 

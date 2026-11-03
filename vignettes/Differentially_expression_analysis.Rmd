@@ -362,7 +362,7 @@ KEY CONCEPTS:
 # Define binning parameters
 # - More bins (100x100): Higher spatial resolution, more noise, longer computation
 # - Fewer bins (10x10): Lower resolution, more stable patterns, faster computation
-grid_length <- 20  # Size of spatial bins (20x20 pixels)
+grid_length <- 20  # Number of bins along each axis (a 20 x 20 grid)
 
 
 # We only analyze actual genes, not control probes
@@ -376,7 +376,7 @@ cat(
   "Data preparation summary:\n",
   "Number of genes to analyze:", length(genes), "\n",
   "Number of negative control probes:", length(nc_names), "\n",
-  "Spatial bin size:", grid_length, "x", grid_length, "pixels\n"
+  "Spatial grid:", grid_length, "x", grid_length, "bins\n"
 )
 
 # Generate spatial vectors for genes and clusters
@@ -389,7 +389,7 @@ r1_sv <- get_vectors(
     sample_names = "Lung5_Rep1",
     cluster_info = r1_cells,
     bin_type = "square",  # Square bins for regular tissue regions
-    bin_param = c(grid_length, grid_length),  # 20x20 pixel bins
+    bin_param = c(grid_length, grid_length),  # 20 x 20 grid of bins
     test_genes = genes  # Only analyze actual genes
 )
 
@@ -405,7 +405,7 @@ r1_sv <- get_vectors(
 #     sample_names = "Lung5_Rep1",
 #     cluster_info = r1_cells,
 #     bin_type = "square",  # Square bins for regular tissue regions
-#     bin_param = c(grid_length, grid_length),  # 20x20 pixel bins
+#     bin_param = c(grid_length, grid_length),  # 20 x 20 grid of bins
 #     test_genes = genes,  # Only analyze actual genes
 #     use_cm=TRUE # # Use cell count matrix instead of transcript coordinates
 # )
@@ -474,7 +474,7 @@ corrplot::corrplot(
 )
 
 ```
-The spatial correlation heatmap reveals how clusters co-localize or segregate across the tissue. Notably, clusters c3 and c4 show a moderate positive correlation (r = 0.39), suggesting they tend to occupy overlapping spatial regions. This is consistent with the spatial plots, where both clusters are enriched along the upper and right edges of the section—potentially reflecting functionally related or spatially adjacent cell types. In contrast, clusters c8 and c4 (r = -0.30) and c8 and c3 (r = -0.27) display negative correlations, indicating mutually exclusive spatial patterns. This is visually supported by the spatial map, where c8 forms a dense central structure, while c3 and c4 are more peripherally distributed. Other cluster pairs, such as c1 and c8 or c6 and c8, also show weak negative correlations, reflecting spatial separation.
+The spatial correlation heatmap reveals how clusters co-localize or segregate across the tissue. Notably, clusters c3 and c4 show the strongest positive correlation in this region (r = 0.26); although weak, it suggests they tend to occupy overlapping spatial regions. This is consistent with the spatial plots, where both clusters are enriched along the upper and right edges of the section—potentially reflecting functionally related or spatially adjacent cell types. In contrast, clusters c8 and c4 (r = -0.37) and c8 and c3 (r = -0.32) display negative correlations, indicating mutually exclusive spatial patterns. This is visually supported by the spatial map, where c8 forms a dense central structure, while c3 and c4 are more peripherally distributed. Other cluster pairs, such as c1 and c8 or c6 and c8, also show weak negative correlations, reflecting spatial separation.
 
 Overall, the correlation structure suggests that most clusters occupy distinct spatial domains, with only a few showing significant overlap. This supports the current clustering resolution as appropriate—there is no strong evidence of overclustering, which would typically manifest as widespread high correlations between clusters. Instead, the results point to a meaningful spatial partitioning of cell types, which can now be further interpreted in the context of tissue architecture or marker gene expression.
 
@@ -695,9 +695,9 @@ for (cl in cluster_names) {
 }
 ```
 
-Cluster c1 shows strong expression of classic lymphoid markers such as IL7R, PTPRC, and SELL, suggesting a robust presence of T cells, likely involved in immune surveillance or infiltration. Cluster c2 lacks clear spatially enriched markers, which may reflect a heterogeneous or transitional cell population, possibly at the interface of tumor and stroma. Cluster c3 is enriched for genes like CD163 and C1QA/B/C, indicating a population of tumor-associated macrophages, potentially contributing to immunosuppressive or tissue-remodeling functions.
+Cluster c1 shows strong spatial correlation with classic lymphoid markers such as IL7R, PTPRC, and CD2, suggesting a robust presence of T cells, likely involved in immune surveillance or infiltration. Cluster c2 lacks clear spatially enriched markers, which may reflect a heterogeneous or transitional cell population, possibly at the interface of tumor and stroma. Cluster c3 is enriched for genes like CD163 and C1QA/B/C, indicating a population of tumor-associated macrophages, potentially contributing to immunosuppressive or tissue-remodeling functions.
 
-Cluster c4 is characterized by high spatial correlation with CXCL8, a pro-inflammatory chemokine, hinting at an inflammatory microenvironment that could influence tumor progression or immune cell recruitment. In cluster c5, although markers weren't explicitly listed, its position in the annotation likely overlaps with the macrophage-rich c3 cluster or represents a related myeloid subtype. Cluster c6 expresses high levels of FN1 and collagens (COL1A1, COL5A1), pointing to a fibroblast-like or CAF population involved in ECM remodeling and structural support. Cluster c7, marked by TPM2, may correspond to contractile stromal cells, such as smooth muscle-like or mesenchymal cells, possibly engaged in mechanical remodeling of the tumor niche.
+Cluster c4 is characterized by high spatial correlation with CXCL8, a pro-inflammatory chemokine, hinting at an inflammatory microenvironment that could influence tumor progression or immune cell recruitment. Cluster c6 expresses high levels of FN1 and collagens (COL1A1, COL5A1), pointing to a fibroblast-like or CAF population involved in ECM remodeling and structural support. Cluster c7 has no significantly correlated genes, even with the relaxed threshold. Its cells form thin, scattered strands interspersed with the tumor region rather than a compact spatial domain, which may explain the lack of a spatial correlation signal.
 
 Cluster c8 shows a strong epithelial gene signature with markers like EPCAM, CDH1, and SOX9, consistent with differentiated tumor cells, potentially with stem-like features. Finally, cluster c9 stands out with high expression of immunoglobulin genes (IGHG1, IGHG2) and MZB1, indicative of plasma cells or plasmablasts, suggesting local antibody production and humoral immune activity. Together, these clusters reflect a spatially organized and biologically diverse landscape of tumor, immune, and stromal elements, underscoring the complex cellular interactions within the cancer microenvironment.
 
@@ -857,7 +857,7 @@ r1_lasso_lst <- lasso_markers(
 ```{r glm_res}
 
 # Top result table 
-# coef_cutoff = 0.2: Only keep genes with coefficient > 0.2
+# coef_cutoff = 0.1: Only keep genes with coefficient > 0.1
 # This threshold can be adjusted based on your needs
 r1_top <- get_top_mg(r1_lasso_lst, coef_cutoff = 0.1)
 
@@ -907,11 +907,11 @@ for (cl in cluster_names) {
 }
 
 ```
-Cluster c1 expresses CD74, HLA-B, and HLA-C, suggesting an antigen-presenting population, likely composed of MHC class II-positive immune cells such as dendritic cells or activated macrophages. The presence of both class I and II HLA genes indicates active immune engagement, potentially linked to antigen processing and T cell interaction.
+Cluster c1 expresses CD74, HLA-B, and HLA-C, suggesting an immune population with active antigen-presentation machinery. CD74 is the MHC class II invariant chain, while HLA-B and HLA-C encode MHC class I molecules; together with the lymphoid markers found by the correlation approach (IL7R, PTPRC, CD2), this indicates active immune engagement, potentially linked to antigen processing and T cell interaction.
 
-Cluster c3, marked by PSAP, C1QA, and GPNMB, again points to a macrophage-rich compartment, likely involved in phagocytic and immunomodulatory functions within the tumor. Similarly, cluster c4, with strong expression of CXCL8, IL1R2, and CCL3L3, reflects a pro-inflammatory myeloid population, potentially involved in leukocyte recruitment and inflammatory cytokine signaling. Cluster c6 shows clear stromal identity with markers such as COL1A1, FN1, and BGN, indicating a fibroblast or cancer-associated fibroblast (CAF) phenotype actively engaged in extracellular matrix organization.
+Cluster c3, marked by PSAP, C1QA, and C1QC, again points to a macrophage-rich compartment, likely involved in phagocytic and immunomodulatory functions within the tumor. Similarly, cluster c4, with strong expression of CXCL8, IL1R2, and CCL3L3, reflects a pro-inflammatory myeloid population, potentially involved in leukocyte recruitment and inflammatory cytokine signaling. Cluster c6 shows clear stromal identity with markers such as COL1A1, FN1, and IGFBP7, indicating a fibroblast or cancer-associated fibroblast (CAF) phenotype actively engaged in extracellular matrix organization.
 
-Cluster c7 now reveals new markers: SERPINA1, PDGFB, and WNT11. This combination may suggest a mesenchymal-like or signaling-active tumor subpopulation, possibly involved in tissue remodeling, angiogenesis (PDGFB), or Wnt-mediated developmental pathways (WNT11). Cluster c8 continues to show epithelial and cancer-associated markers such as S100A6, OLFM4, and TM4SF1, reinforcing its identity as a tumor epithelial compartment, potentially with proliferative or invasive potential. Cluster c9 is again defined by immunoglobulin genes IGHG1, IGKC, and IGHA1, strongly supporting the presence of plasma cells or plasmablasts, indicating a local humoral immune response. Cluster c2 remains without clear marker genes, possibly representing a transcriptionally ambiguous or under-characterized population requiring further resolution.
+Cluster c7, which had no significant markers with the correlation approach, now reveals candidate markers: SERPINA1, COL12A1, and PDGFB, with SERPINA1 having by far the largest coefficient. This combination may suggest a mesenchymal-like or signaling-active subpopulation, possibly involved in extracellular matrix remodeling (COL12A1) or angiogenesis (PDGFB). Cluster c8 continues to show epithelial and cancer-associated markers such as KRT19, OLFM4, and KRT17, reinforcing its identity as a tumor epithelial compartment, potentially with proliferative or invasive potential. Cluster c9 is again defined by immunoglobulin genes IGHG1, IGKC, and IGHA1, strongly supporting the presence of plasma cells or plasmablasts, indicating a local humoral immune response. Cluster c2 remains without clear marker genes, possibly representing a transcriptionally ambiguous or under-characterized population requiring further resolution.
 
 ### Visualize Top Marker Genes from Linear Modelling
 
@@ -1267,9 +1267,9 @@ multi_sample_full[multi_sample_full$gene=="EPCAM", ]
 
 multi_sample_full[multi_sample_full$gene=="MZB1", ]
 ```
-Cluster c1 is characterized by MALAT1, CD74, and HLA-B, suggesting a lymphoid or antigen-presenting cell population. CD74 and HLA-B are involved in MHC class II presentation, while MALAT1 is a long non-coding RNA often expressed in immune cells and implicated in T cell activation or regulation. Cluster c2, marked by COL12A1, likely represents a stromal subset, possibly fibroblasts or ECM-producing cells, consistent with its role in collagen cross-linking and matrix organization.
+Cluster c1 is characterized by MALAT1, CD74, and HLA-B, suggesting a lymphoid or antigen-presenting cell population. CD74 (the MHC class II invariant chain) and HLA-B (an MHC class I molecule) are both part of the antigen-presentation machinery, while MALAT1 is a long non-coding RNA often expressed in immune cells and implicated in T cell activation or regulation. Cluster c2 now has two candidate markers, IGF2 and CENPF, but both have small coefficients and weak spatial correlations, and c2 contains only around 30 cells per sample, so these markers should be treated as tentative. CENPF is a proliferation-associated gene, hinting at a small, possibly proliferating population.
 
-Cluster c3 shows clear expression of PSAP, C1QA, and GPNMB, aligning with a macrophage or monocyte-derived population. These genes are commonly found in tissue-resident or tumor-associated macrophages, particularly those involved in phagocytosis and immune modulation. Cluster c4 expresses pro-inflammatory markers CXCL8, IL1R2, and S100A8, suggesting a myeloid-derived population actively participating in inflammation or chemotaxis. Cluster c6, with high levels of COL1A1, FN1, and IGFBP7, reflects a classic fibroblast-like phenotype, potentially representing cancer-associated fibroblasts (CAFs) involved in extracellular matrix remodeling and paracrine signaling.
+Cluster c3 shows clear expression of PSAP, C1QA, and C1QC, aligning with a macrophage or monocyte-derived population. These genes are commonly found in tissue-resident or tumor-associated macrophages, particularly those involved in phagocytosis and immune modulation. Cluster c4 expresses the pro-inflammatory chemokine CXCL8 together with S100A8 and HCAR2, both highly expressed by neutrophils, suggesting a neutrophil-like myeloid population actively participating in inflammation or chemotaxis. Cluster c6, with high levels of COL1A1, FN1, and IGFBP7, reflects a classic fibroblast-like phenotype, potentially representing cancer-associated fibroblasts (CAFs) involved in extracellular matrix remodeling and paracrine signaling.
 
 Cluster c7 did not yield identifiable marker genes under current thresholds, which could indicate a more transcriptionally quiescent population or a mixed/ambiguous identity. Cluster c8 expresses epithelial and tumor-associated markers including S100A6, KRT19, and OLFM4, suggesting it corresponds to a tumor epithelial compartment, possibly with proliferative or stem-like features. Lastly, cluster c9 is defined by immunoglobulin genes IGHG1, IGKC, and IGHA1, indicative of plasma cells or antibody-secreting plasmablasts, pointing to active humoral immune engagement within the tumor microenvironment.
 
