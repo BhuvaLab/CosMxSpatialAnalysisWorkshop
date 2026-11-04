@@ -26,13 +26,24 @@ Attendees will require a laptop with internet access and should have familiarity
 
 ### Session 2 - Deciphering spatial marker genes using JazzPanda
 
+This session runs over two days.
+
 | Activity                                                             | Time |
 |----------------------------------------------------------------------|------|
-| Introduction & setup                                                 | 30m  |
-| Part 1. Marker gene concepts in spatial transcriptomics              | 45m  |
-| Part 2. One-sample scenario                                          | 45m  |
-| Part 3. Multiple-sample scenario                                     | 45m  |
-| Q & A                                                                | 15m  |
+| **Day 1**                                                            |      |
+| Introduction: core ideas of spatially aware marker gene detection    | 30m  |
+| Part 1. Data overview and spatial distribution of cell clusters      | 5m   |
+| Part 1. Spatial vectors and spatial correlation                      | 10m  |
+| Part 2. One-sample: correlation-based approach (permutation test)    | 15m  |
+| **Day 2**                                                            |      |
+| Part 2. One-sample: linear modelling with background correction      | 20m  |
+| Part 2. One-sample: comparison with FindMarkers                      | 10m  |
+| Part 3. Multiple-sample scenario: markers across replicates          | 20m  |
+| Summary and Q & A                                                    | 10m  |
+
+jazzPanda is described in the following preprint:
+
+> Jin X, Putri GH, Cheng J, Asselin-Labat M-L, Smyth GK, Phipson B (2026). jazzPanda: spatially aware marker gene detection for imaging-based spatial transcriptomics. *bioRxiv*. <https://www.biorxiv.org/content/10.64898/2026.02.13.705867v3>
 
 
 ### Session 3 - Selecting clinically relevant features from molecular phenotypes
