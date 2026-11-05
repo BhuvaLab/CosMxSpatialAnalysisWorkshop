@@ -356,7 +356,7 @@ Library size normalisation is important to ensure technical variation is removed
 ```{r polish, eval = exists("polishSpaNorm", where = asNamespace("SpaNorm"))}
 # converge each gene to its own optimum and update the normalised data
 lung5 = polishSpaNorm(lung5)
-isPolished(lung5)
+isPolished(S4Vectors::metadata(lung5)$SpaNorm)
 ```
 
 Polishing is optional and the results are usually very similar to the original fit. It is most useful when downstream results, such as spatially variable gene testing, are sensitive to small differences in the fitted model. A polished fit is refused a second time unless `overwrite = TRUE` is used, and the unpolished fit is kept in the object for comparison. Genes with no counts in the polished cells cannot be converged and retain their original fit (a warning reports these).
