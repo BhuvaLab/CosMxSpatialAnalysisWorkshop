@@ -349,6 +349,18 @@ p1 + p2 + p3
 
 Library size normalisation is important to ensure technical variation is removed from gene expression. In the most extreme cases, a gene that is highly expressed in a region of interest may seem to be lowly expressed because of a drop in library sizes in said region (see manuscript). We have seen that negative probes across most technologies are also capturing library size effects very well and are experimenting with using these to model technical variation and normalise data. In some technologies/datasets, these are very lowly expressed, not because of better data quality but by design as well, and therefore would NOT faithfully represent technical variation. As with every other step, this is still an active area of research.
 
+## Polishing the SpaNorm fit
+
+`SpaNorm()` fits all genes together in one shared iterative loop, using gene-averaged cell weights and an aggregate convergence criterion. A gene can therefore stop slightly short of its own optimum, which is most likely for bright, spatially restricted genes. The `polishSpaNorm()` function (available in the development version of SpaNorm) takes the stored fit and converges each gene separately under the same model, then rewrites the normalised assay from the polished fit. By default, the shared library size coefficient and each gene's dispersion are kept as estimated by `SpaNorm()`, so only the per-gene coefficients are refined.
+
+```{r polish, eval = exists("polishSpaNorm", where = asNamespace("SpaNorm"))}
+# converge each gene to its own optimum and update the normalised data
+lung5 = polishSpaNorm(lung5)
+isPolished(lung5)
+```
+
+Polishing is optional and the results are usually very similar to the original fit. It is most useful when downstream results, such as spatially variable gene testing, are sensitive to small differences in the fitted model. A polished fit is refused a second time unless `overwrite = TRUE` is used, and the unpolished fit is kept in the object for comparison. Genes with no counts in the polished cells cannot be converged and retain their original fit (a warning reports these).
+
 # Identifying spatially variable genes (SVGs)
 
 Not all genes in the study are likely to be meaningful, therefore, a key step in any transcriptomic analysis is to identify informative features/genes. In spatial transcriptomics, we are interest in identifying features that are spatially non-random. These genes should vary spatially along with biology and are thus referred to as spatially variable genes (SVGs). Common approaches to identify these genes use approaches inspired from spatial statistics such as Moran's I. However, these approaches generally work with unnormalised data and often apply their own non-spatial normalisation to the data prior to identifying SVGs. As we have a spatial normalisation approach, we want to retain our normalisation.
@@ -442,8 +454,6 @@ plotSpatial(lung5, colour = cell_type, alpha = 0.75) +
   theme(legend.position = "bottom") +
   guides(colour = guide_legend(override.aes = list(shape = 15, size = 5, alpha = 1)))
 ```
-
-> Though discrete cell type identities are appealing due to their ease of interpretation, in many biological systems, metastable cell states (also referred to as plasticity) are likely to be present. Thus, such discrete cell type annotation may force cells into states that are not representative of true biology. PhiSpace is a method developed to deal with this issue. PhiSpace assigns a continuous score for each cell belonging to a cell type. These scores can either be thought of as the degree of evidence towards a cell conforming to a certain cell type, or the location of a cell in a plastic trajectory. In cancer sytems, where plasticity is dominant due to regression to stem-like states, the continuous cell annotation PhiSpace provides is powerful.
 
 # Spatial domain identification
 
