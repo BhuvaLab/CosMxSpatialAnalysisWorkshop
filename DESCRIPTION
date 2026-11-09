@@ -75,11 +75,13 @@ Suggests:
     prettydoc,
     rmarkdown,
     spelling,
-    hexbin
+    hexbin,
+    testthat (>= 3.0.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Language: en-US
 URL: https://bhuvalab.github.io/CosMxSpatialAnalysisWorkshop/
 BugReports: https://github.com/BhuvaLab/CosMxSpatialAnalysisWorkshop/issues
 DockerImage: bhuvad/CosMxSpatialAnalysisWorkshop:latest
 LazyData: true
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1

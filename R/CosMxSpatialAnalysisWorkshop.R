@@ -25,10 +25,52 @@
 #' 
 "ref_luca"
 
-.myDataEnv <- new.env(parent = emptyenv()) # not exported
+#' Pulmonary fibrosis spatial transcriptomics dataset (cell level)
+#'
+#' Cell-level metadata and spatial coordinates for 1,571,449 cells measured
+#' with a 343-gene panel across 45 samples from 35 patients (control and
+#' pulmonary fibrosis lungs). The object carries no assays; use
+#' [fibrosis_pb_spe] or [fibrosis_pseudobulk_counts] for expression. Load it
+#' together with the other fibrosis datasets using `load_data("fibrosis")`.
+#'
+#' @format A SpatialExperiment object with 343 rows (genes) and 1,571,449
+#'   columns (cells). Key `colData` columns: `sample_id`, `patient`,
+#'   `disease_status`, `tma`, `final_CT` (cell type), `CNiche` (cellular
+#'   niche), `nCount_RNA` and `nFeature_RNA`. Spatial coordinates are
+#'   `super_adj_x_centroid` and `super_adj_y_centroid`.
+#' @docType data
+#' @source GEO accession GSE250346,
+#'   <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE250346>. See
+#'   `inst/scripts/prepare_fibrosis_data.R`.
+#' @references Vannan A, Lyu R, Williams AL, et al. Spatial transcriptomics
+#'   identifies molecular niche dysregulation associated with distal lung
+#'   remodeling in pulmonary fibrosis. Nature Genetics. 2025.
+#' @seealso [load_data()]
+"fibrosis_spe"
 
-.data_internal <- function(dataset) {
-  if (!exists(dataset, envir = .myDataEnv)) {
-    utils::data(list = c(dataset), envir = .myDataEnv)
-  }
-}
+#' Pulmonary fibrosis pseudobulk dataset (SpatialExperiment)
+#'
+#' Counts from [fibrosis_spe] summed within each sample, cellular niche and
+#' cell type, giving 14,645 pseudobulk profiles.
+#'
+#' @format A SpatialExperiment object with 343 rows (genes) and 14,645
+#'   columns (pseudobulk profiles), with a `counts` assay. Key `colData`
+#'   columns: `sample`, `patient`, `disease_status`, `final_CT`, `CNiche`.
+#' @docType data
+#' @source GEO accession GSE250346. See `inst/scripts/prepare_fibrosis_data.R`.
+#' @seealso [load_data()], [fibrosis_spe]
+"fibrosis_pb_spe"
+
+#' Pulmonary fibrosis pseudobulk counts
+#'
+#' Counts from [fibrosis_spe] summed within each sample, cellular niche
+#' (`CNiche`) and cell type (`final_CT`), with the number of cells in each
+#' profile.
+#'
+#' @format A SummarizedExperiment object with 343 rows (genes) and 14,645
+#'   columns (pseudobulk profiles), with a `sum` assay. `colData` columns:
+#'   `sample`, `CNiche`, `final_CT` and `ncells`.
+#' @docType data
+#' @source GEO accession GSE250346. See `inst/scripts/prepare_fibrosis_data.R`.
+#' @seealso [load_data()], [fibrosis_spe]
+"fibrosis_pseudobulk_counts"
