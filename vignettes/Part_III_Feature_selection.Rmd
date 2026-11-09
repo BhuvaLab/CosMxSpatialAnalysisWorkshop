@@ -77,14 +77,17 @@ By the end of this part, you will be able to:
 
 ```{r libraries}
 # TODO: load the packages used below, and add each to DESCRIPTION.
+library(CosMxSpatialAnalysisWorkshop)
 library(SpatialExperiment)
 library(ggplot2)
 library(patchwork)
 ```
 
 ```{r load-data}
-# TODO: load the prepared dataset.
-# TODO: load the bundled dataset with data() from this package.
+fibrosis <- load_data("fibrosis")
+spe <- fibrosis$spe
+pb_spe <- fibrosis$pb_spe
+pseudobulk_counts <- fibrosis$pseudobulk_counts
 ```
 
 # Defining molecular phenotypes
